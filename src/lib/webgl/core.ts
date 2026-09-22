@@ -12,11 +12,12 @@ export function sceneProgress(scrollY: number, height: number, sections: Section
 }
 
 export interface CachedRect { left: number; top: number; width: number; height: number }
-export function imageRect(rect: CachedRect, scrollY: number, width: number, height: number) {
+export function imageRect(rect: CachedRect, scrollY: number, width: number, height: number, offsetX = 0) {
   const top = rect.top - scrollY;
-  return { x: rect.left + rect.width / 2 - width / 2, y: height / 2 - top - rect.height / 2,
+  const left = rect.left + offsetX;
+  return { x: left + rect.width / 2 - width / 2, y: height / 2 - top - rect.height / 2,
     width: rect.width, height: rect.height,
-    visible: rect.width > 0 && rect.height > 0 && top < height && top + rect.height > 0 && rect.left < width && rect.left + rect.width > 0 };
+    visible: rect.width > 0 && rect.height > 0 && top < height && top + rect.height > 0 && left < width && left + rect.width > 0 };
 }
 export function renderBudget(touch: boolean, deviceDpr: number) {
   return { dpr: clamp(deviceDpr || 1, 1, touch ? 1.35 : 1.75), particles: touch ? 900 : 2400, segments: touch ? 48 : 96 };

@@ -1,5 +1,6 @@
 import gsap from 'gsap';
 import { initMotion } from './animation';
+import { initExperienceGame } from './interaction/experience-game';
 
 let cleanupPage: (() => void) | undefined;
 let generation = 0;
@@ -22,6 +23,7 @@ async function initialize() {
   const commands = Array.from(document.querySelectorAll<HTMLElement>('[data-command]'));
   let previouslyFocused: HTMLElement | null = null;
   let motionCleanup: (() => void) | undefined;
+  let experienceGameCleanup: (() => void) | undefined;
   const close = () => { dialog?.close(); previouslyFocused?.focus({ preventScroll: true }); };
   const open = () => {
     if (!dialog || !search) return;
@@ -101,7 +103,8 @@ async function initialize() {
     const pre = dev.querySelector('pre');
     if(pre) pre.textContent = `SYSTEM INSPECTOR\nViewport  ${innerWidth} × ${innerHeight}\nDPR       ${devicePixelRatio.toFixed(2)}\nRenderer  ${document.documentElement.dataset.webgl || 'static'}\nSection   ${document.documentElement.dataset.section || 'hero'}\nScroll    ${Math.round(scrollY)}px\nMotion    ${reduced.matches?'reduced':'full'}`;
   }, 500);
-  cleanupPage = () => { controller.abort(); observers.forEach(o=>o.disconnect()); tweens.forEach(t=>t.kill());clearInterval(diagnostic);motionCleanup?.();gsap.killTweensOf(toast); };
+  experienceGameCleanup = initExperienceGame();
+  cleanupPage = () => { controller.abort(); observers.forEach(o=>o.disconnect()); tweens.forEach(t=>t.kill());clearInterval(diagnostic);motionCleanup?.();experienceGameCleanup?.();gsap.killTweensOf(toast); };
   try { const cleanup = await initMotion(); if(current !== generation) cleanup(); else motionCleanup = cleanup; }
   catch(error) { console.warn('Enhanced motion unavailable; static content remains accessible.',error); }
 }

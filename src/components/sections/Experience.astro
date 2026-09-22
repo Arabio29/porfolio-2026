@@ -6,7 +6,18 @@ import { copy } from '../../data/interface';
 <section id="experience" class="experience section-pad" aria-labelledby="experience-title">
   <div class="chapter mono"><span>03 / ENGINEERING PRACTICE</span><span>DEPTH OVER LABELS</span></div>
   <div class="section-heading">
-    <h2 id="experience-title">{copy.experienceTitle.map((line) => <span data-reveal>{line}</span>)}</h2>
+    <div class="experience-game" data-experience-game>
+      <h2 id="experience-title" class="sr-only">Engineering practice: a desert drive</h2>
+      <div class="experience-game-top">
+        <span class="mono">DESERT / 01</span>
+        <span class="mono">ARROWS / WASD / R RESET</span>
+      </div>
+      <div class="experience-game-board" data-experience-board tabindex="0" role="group" aria-label="Desert driving world controlled by arrow keys or W A S D" aria-describedby="experience-game-instructions">
+        <canvas data-experience-game-canvas aria-hidden="true"></canvas>
+        <div class="experience-game-overlay" aria-hidden="true"><span class="mono">DESERT / FREE ROAM</span><span class="mono" data-game-status>CAR / READY</span></div>
+      </div>
+      <p id="experience-game-instructions" class="experience-game-instructions">Focus the desert, then drive with the arrow keys or <strong>W A S D</strong>. Press <strong>R</strong> to return to the origin. The world listens only while this section is visible.</p>
+    </div>
     <p>{copy.experienceNote}</p>
   </div>
   <div class="experience-coordinate mono"><span>CAREER / 00—NOW</span><span>THE LAYERS BEHIND THE INTERFACE</span></div>

@@ -152,11 +152,18 @@ class WebGLExperience {
     if (!imageCount && !reactorVisible) { this.canvas.style.visibility = 'hidden'; return; }
     try {
       this.renderer.clear();
-      // Image-only frames sit above opaque editorial panels; never cover their text.
-      // The canvas returns to z=1 for the hero/manifesto/contact composition.
-      this.canvas.style.zIndex = imageCount ? '3' : '1';
+      const scene = reactorVisible
+        ? sceneProgress(state.scroll.y, state.viewport.height, this.sections)
+        : undefined;
+      const nextChapterEntering = scene &&
+        state.scroll.y + state.viewport.height * .78 > this.sections.manifestoTop &&
+        state.scroll.y < this.sections.manifestoTop + state.viewport.height * .65;
+      // Let the reactor bleed over the next chapter only while the narrative
+      // is crossing from Hero into Manifesto. Normal sections keep their text
+      // above the graphics layer.
+      this.canvas.style.zIndex = imageCount || nextChapterEntering ? '3' : '1';
       if (reactorVisible && !imageCount && this.reactor) {
-        const { dissolve, regroup } = sceneProgress(state.scroll.y, state.viewport.height, this.sections);
+        const { dissolve, regroup } = scene!;
         this.reactor.update(time, dt, dissolve, regroup, state.mouse);
         this.camera.position.x = damp(this.camera.position.x, state.mouse.x * .10, 2, dt);
         this.camera.position.y = damp(this.camera.position.y, state.mouse.y * .075, 2, dt);

@@ -29,6 +29,17 @@ export function initSections(manager: MotionManager): () => void {
         clearProps: 'transform,clipPath',
       });
     });
+    document.querySelectorAll<HTMLElement>('[data-marquee-track]').forEach(track => {
+      const direction = track.dataset.marqueeDirection === '1' ? 1 : -1;
+      const from = direction === 1 ? -50 : 0;
+      const to = direction === 1 ? 0 : -50;
+      gsap.fromTo(track, { xPercent: from }, {
+        xPercent: to,
+        duration: 24,
+        repeat: -1,
+        ease: 'none',
+      });
+    });
     if (manager.state.isTouch) return;
     document.querySelectorAll<HTMLElement>('.depth-plane').forEach(element => {
       gsap.fromTo(element, { scaleX: 0.94, scaleY: 0.94, y: 54, rotationX: 4, transformPerspective: 1200 }, {
@@ -45,6 +56,36 @@ export function initSections(manager: MotionManager): () => void {
         scrollTrigger: { trigger: image, start: 'top bottom', end: 'bottom top', scrub: 0.7 },
       });
     });
+    const workWindow = document.querySelector<HTMLElement>('[data-work-window]');
+    const workTrack = workWindow?.querySelector<HTMLElement>('[data-horizontal-track]');
+    if (workWindow && workTrack && !manager.state.isTouch && workTrack.scrollWidth > workWindow.clientWidth) {
+      workTrack.dataset.x = '0';
+      const travel = () => Math.max(0, workTrack.scrollWidth - workWindow.clientWidth);
+      const horizontal = gsap.to(workTrack, {
+        x: () => -travel(),
+        ease: 'none',
+        onUpdate: () => {
+          const x = Number(gsap.getProperty(workTrack, 'x')) || 0;
+          workTrack.dataset.x = String(x);
+        },
+        scrollTrigger: {
+          // The heading remains a normal vertical chapter. Horizontal motion
+          // starts only when the project rail itself reaches the viewport.
+          trigger: workWindow,
+          start: 'top 30%',
+          end: () => `+=${travel()}`,
+          scrub: 0.75,
+          pin: true,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+          onRefresh: () => {
+            const x = Number(gsap.getProperty(workTrack, 'x')) || 0;
+            workTrack.dataset.x = String(x);
+          },
+        },
+      });
+      extra.push(() => horizontal.scrollTrigger?.kill());
+    }
     const lab = document.querySelector<HTMLElement>('#lab');
     const track = document.querySelector<HTMLElement>('#lab-track');
     if (lab && track && track.scrollWidth > lab.clientWidth) {

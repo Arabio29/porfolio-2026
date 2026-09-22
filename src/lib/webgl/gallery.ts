@@ -11,6 +11,8 @@ interface ImagePlane {
   image: HTMLImageElement;
   mesh: Mesh<PlaneGeometry, ShaderMaterial>;
   bounds: CachedRect;
+  horizontalTrack?: HTMLElement;
+  horizontalScroller?: HTMLElement;
   hovered: boolean;
   ready: boolean;
 }
@@ -38,7 +40,7 @@ export class ImageGallery {
       const mesh = new Mesh(this.geometry, material);
       mesh.visible = false;
       this.scene.add(mesh);
-      const plane: ImagePlane = { image, mesh, bounds: { left: 0, top: 0, width: 0, height: 0 }, hovered: false, ready: false };
+      const plane: ImagePlane = { image, mesh, bounds: { left: 0, top: 0, width: 0, height: 0 }, horizontalTrack: image.closest<HTMLElement>('[data-horizontal-track]') ?? undefined, horizontalScroller: image.closest<HTMLElement>('[data-work-window]') ?? undefined, hovered: false, ready: false };
       this.planes.push(plane);
       const target = image.closest('a') ?? image;
       const enter = () => { plane.hovered = true; };
@@ -73,7 +75,9 @@ export class ImageGallery {
   measure(scrollY: number) {
     for (const plane of this.planes) {
       const rect = plane.image.getBoundingClientRect();
-      plane.bounds = { left: rect.left, top: rect.top + scrollY, width: rect.width, height: rect.height };
+      const trackX = plane.horizontalTrack ? Number.parseFloat(plane.horizontalTrack.dataset.x || '0') || 0 : 0;
+      const horizontalScroll = plane.horizontalScroller?.scrollLeft || 0;
+      plane.bounds = { left: rect.left + horizontalScroll - trackX, top: rect.top + scrollY, width: rect.width, height: rect.height };
       const imageAspect = plane.image.naturalWidth / Math.max(1, plane.image.naturalHeight);
       const planeAspect = rect.width / Math.max(1, rect.height);
       plane.mesh.material.uniforms.uCover.value.set(Math.min(1, planeAspect / (imageAspect || 1)), Math.min(1, (imageAspect || 1) / planeAspect));
@@ -89,7 +93,9 @@ export class ImageGallery {
     }
     let visible = 0;
     for (const plane of this.planes) {
-      const rect = imageRect(plane.bounds, state.scroll.y, width, height);
+      const trackX = plane.horizontalTrack ? Number.parseFloat(plane.horizontalTrack.dataset.x || '0') || 0 : 0;
+      const horizontalScroll = plane.horizontalScroller?.scrollLeft || 0;
+      const rect = imageRect(plane.bounds, state.scroll.y, width, height, trackX - horizontalScroll);
       plane.mesh.visible = plane.ready && rect.visible;
       if (!plane.mesh.visible) continue;
       visible++;
