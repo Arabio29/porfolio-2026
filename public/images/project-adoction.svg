@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" role="img" aria-labelledby="title desc">
+  <title id="title">Adoction API architecture study</title>
+  <desc id="desc">A cobalt blueprint showing HTTP, application, domain and infrastructure layers for a pet adoption API.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#07102b"/><stop offset=".55" stop-color="#102b72"/><stop offset="1" stop-color="#080808"/></linearGradient>
+    <pattern id="grid" width="42" height="42" patternUnits="userSpaceOnUse"><path d="M42 0H0V42" fill="none" stroke="#9eb2ff" stroke-opacity=".14"/></pattern>
+  </defs>
+  <rect width="1600" height="1000" fill="url(#bg)"/><rect width="1600" height="1000" fill="url(#grid)"/>
+  <g transform="translate(150 170)" fill="none" stroke="#f1efe9" stroke-width="3">
+    <rect width="1300" height="130" rx="3"/><rect y="220" width="1300" height="130" rx="3"/><rect y="440" width="1300" height="130" rx="3"/>
+    <path d="M650 130V220M650 350V440" stroke="#9eb2ff" stroke-width="9"/><path d="M260 570v120h780V570" stroke="#9eb2ff" stroke-width="9"/>
+    <circle cx="650" cy="175" r="14" fill="#2957ff"/><circle cx="650" cy="395" r="14" fill="#2957ff"/><circle cx="650" cy="615" r="14" fill="#2957ff"/>
+  </g>
+  <g fill="#f1efe9" font-family="monospace" font-size="32" letter-spacing="5"><text x="200" y="250">HTTP / CONTROLLERS</text><text x="200" y="470">APPLICATION / SERVICES</text><text x="200" y="690">DOMAIN / PETS / SHELTERS</text><text x="200" y="830" fill="#9eb2ff">INFRASTRUCTURE / REPOSITORY</text><text x="100" y="930" font-size="18">ADOCTION / C# / .NET / PUBLIC API STUDY</text></g>
+</svg>

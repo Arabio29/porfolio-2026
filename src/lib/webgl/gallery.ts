@@ -29,7 +29,7 @@ export class ImageGallery {
 
   constructor(images: HTMLImageElement[], loadTexture: (src: string) => Promise<Texture> = (src: string) => new TextureLoader().loadAsync(src)) {
     this.camera.position.z = 2;
-    const tasks = images.map(image => {
+    const tasks = images.map(async (image) => {
       const material = new ShaderMaterial({ vertexShader: imageVertex, fragmentShader: imageFragment,
         depthTest: false, depthWrite: false, transparent: true,
         uniforms: { uTexture: { value: null }, uHover: { value: 0 }, uTime: { value: 0 },
@@ -50,6 +50,9 @@ export class ImageGallery {
       });
       const src = image.currentSrc || image.src;
       if (!src) return Promise.resolve();
+      // SVG remains the authoritative DOM image. Raster assets can opt into
+      // the shader gallery later without asking WebGL to upload an SVG image.
+      if (src.split('?')[0].toLowerCase().endsWith('.svg')) return Promise.resolve();
       if (!this.textures.has(src)) {
         this.textures.set(src, loadTexture(src).then(texture => {
           texture.colorSpace = SRGBColorSpace;

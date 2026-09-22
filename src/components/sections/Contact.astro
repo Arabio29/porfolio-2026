@@ -1,4 +1,16 @@
 ---
-import {profile} from '../../data/profile';import {socials} from '../../data/socials';import {copy} from '../../data/interface';
+import { profile } from '../../data/profile';
+import { socials } from '../../data/socials';
+import { copy } from '../../data/interface';
 ---
-<section id="contact" class="contact section-pad"><div class="chapter mono"><span>07 / NEXT CONNECTION</span><span>YOUR IDEA. OUR NEXT CHAPTER.</span></div><div class="contact-heading"><h2>{profile.contactTitle.map((t,i)=><span data-reveal class:list={[{'contact-outline':i===2}]}>{t}</span>)}</h2><a class="contact-cta" data-magnetic data-cursor="LET’S TALK" href={profile.email?`mailto:${profile.email}`:socials.github} target={profile.email?undefined:'_blank'} rel="noopener noreferrer" aria-label={profile.email?'Start a conversation by email':'Visit Eliasib on GitHub'}><span>↗</span><small>START A<br/>CONVERSATION</small></a></div><div class="contact-bottom"><p>{copy.contactNote}</p><div class="social-links">{profile.email&&<button data-copy-email={profile.email}>Copy email ↗</button>}<a href={socials.github} target="_blank" rel="noopener noreferrer">GitHub ↗</a>{socials.linkedin&&<a href={socials.linkedin}>LinkedIn ↗</a>}{profile.resume&&<a href={profile.resume}>Résumé ↗</a>}</div></div>{!profile.email&&<p class="editor-note mono">{copy.missingEmail}</p>}<footer class="site-footer mono"><span>© {profile.name.toUpperCase()} / {profile.role.toUpperCase()}</span><span>BUILT WITH INTENT.</span><a href="#hero">BACK TO TOP ↑</a></footer></section>
+
+<section id="contact" class="contact section-pad" aria-labelledby="contact-title">
+  <div class="chapter mono"><span>07 / NEXT CONNECTION</span><span>YOUR IDEA. OUR NEXT CHAPTER.</span></div>
+  <div class="contact-heading">
+    <div><span class="mono contact-kicker">OPEN CHANNEL / 07</span><h2 id="contact-title">{profile.contactTitle.map((line, index) => <span data-reveal class:list={[{ 'contact-outline': index === 2 }]}>{line}</span>)}</h2></div>
+    <a class="contact-cta" data-magnetic data-cursor="LET’S TALK" href={profile.email ? `mailto:${profile.email}` : socials.github} target={profile.email ? undefined : '_blank'} rel="noopener noreferrer" aria-label={profile.email ? 'Start a conversation by email' : 'Visit Eliasib on GitHub'}><span aria-hidden="true">↗</span><small>START A<br />CONVERSATION</small></a>
+  </div>
+  <div class="contact-bottom"><p>{copy.contactNote}{profile.email && <a class="contact-email" href={`mailto:${profile.email}`}>{profile.email}</a>}</p><div class="social-links">{profile.email && <button data-copy-email={profile.email}>Copy email ↗</button>}<a href={socials.github} target="_blank" rel="noopener noreferrer">GitHub ↗</a>{socials.linkedin && <a href={socials.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>}{socials.website && <a href={socials.website} target="_blank" rel="noopener noreferrer">Website ↗</a>}{socials.youtube && <a href={socials.youtube} target="_blank" rel="noopener noreferrer">YouTube ↗</a>}{profile.resume && <a href={profile.resume}>Résumé ↗</a>}</div></div>
+  {!profile.email && <p class="editor-note mono">{copy.missingEmail}</p>}
+  <footer class="site-footer mono"><span>© {profile.name.toUpperCase()} / {profile.role.toUpperCase()}</span><span>BUILT WITH INTENT.</span><a href="#hero">BACK TO TOP ↑</a></footer>
+</section>

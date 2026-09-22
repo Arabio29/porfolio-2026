@@ -1,10 +1,10 @@
 export interface Experience {
  role: string; company: string; period: string; location: string; description: string; technologies: string[];
 }
-// No employment history was supplied. Never replace this with invented dates or employers.
+// Public profile data confirms the engineering focus, but not employers or dates.
 export const experience: Experience[] = [];
 export const practice = [
- { number: '01', name: 'Behind the interface.', discipline: 'SYSTEMS / BACKEND', description: 'C#, .NET and ASP.NET Core. REST APIs, backend integration and relational databases.', technologies: ['C#', '.NET', 'ASP.NET Core', 'REST APIs'] },
- { number: '02', name: 'Where people meet code.', discipline: 'INTERFACES / FRONTEND', description: 'Blazor, Angular and TypeScript. Frontend architecture, reusable UI libraries and enterprise web applications.', technologies: ['Blazor', 'Angular', 'TypeScript', 'JavaScript'] },
- { number: '03', name: 'Built to keep working.', discipline: 'DELIVERY / MAINTENANCE', description: 'Code review, performance and application maintenance. Git, Docker and Nginx support the delivery workflow.', technologies: ['Git', 'Docker', 'Nginx', 'Code review'] },
+  { number: '01', name: 'Behind the interface.', discipline: 'SYSTEMS / BACKEND', description: 'C#, .NET, ASP.NET Core and Java/Spring Boot. REST APIs, authentication, backend integration and relational data.', technologies: ['C#', '.NET', 'ASP.NET Core', 'Java', 'Spring Boot'] },
+  { number: '02', name: 'Where people meet code.', discipline: 'INTERFACES / FRONTEND', description: 'Blazor, Angular and JavaScript-based interfaces. Reusable components, routes, guards and enterprise workflows.', technologies: ['Blazor', 'Angular', 'TypeScript', 'JavaScript'] },
+  { number: '03', name: 'Built to keep working.', discipline: 'DELIVERY / CLOUD', description: 'Docker, Linux, Nginx and Azure DevOps. I am extending this practice toward cloud-native and distributed systems.', technologies: ['Docker', 'Linux', 'Nginx', 'Azure DevOps', 'CI/CD'] },
 ];

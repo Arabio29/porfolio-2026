@@ -1,4 +1,13 @@
 ---
-import { navigation,copy } from '../../data/interface';
+import { navigation, copy } from '../../data/interface';
+import { profile } from '../../data/profile';
 ---
-<header class="site-header"><a class="wordmark" href="/" aria-label="Eliasib home">e<span class="brand-dot">.</span></a><span class="header-status mono"><i></i>{copy.system}</span><nav aria-label="Main navigation">{navigation.map(item=><a href={`/#${item.id}`} data-nav={item.id}>{item.label}<span>↗</span></a>)}</nav><button class="command-toggle" data-open-palette aria-label="Open command palette"><span>⌘</span> K</button></header>
+
+<header class="site-header">
+  <a class="wordmark" href="/" aria-label={`${profile.name} home`}>e<span class="brand-dot">.</span></a>
+  <div class="header-system mono"><i aria-hidden="true"></i><span>{copy.system}</span></div>
+  <nav aria-label="Main navigation">
+    {navigation.map((item) => <a href={`/#${item.id}`} data-nav={item.id}>{item.label}<span aria-hidden="true">↗</span></a>)}
+  </nav>
+  <button class="command-toggle" data-open-palette aria-label="Open command palette"><span aria-hidden="true">⌘</span><b>K</b></button>
+</header>

@@ -1,4 +1,25 @@
 ---
-import {skills,additionalSkills,physicsWords} from '../../data/skills';import {copy} from '../../data/interface';
+import { skills, additionalSkills, physicsWords } from '../../data/skills';
+import { copy } from '../../data/interface';
 ---
-<section id="ecosystem" class="ecosystem section-pad"><div class="chapter mono"><span>04 / DEVELOPMENT ECOSYSTEM</span><span>CONNECTED, NOT COLLECTED</span></div><h2>{copy.ecosystemTitle.map(t=><span data-reveal>{t}</span>)}</h2><div class="ecosystem-map"><svg class="node-lines" viewBox="0 0 1000 600" preserveAspectRatio="none" aria-hidden="true"><path d="M500 300L180 100M500 300L810 110M500 300L140 430M500 300L850 430M500 300L500 540"/></svg><div class="system-core" aria-hidden="true"><span>e.</span><small class="mono">THE CORE</small></div>{skills.map(s=><details class={`skill-node ${s.position}`} data-skill-node><summary><span class="mono">{s.name}</span><strong>{s.lead}</strong><span class="node-plus">+</span></summary><div class="skill-detail"><p>{s.detail}</p><ul>{s.items.map(t=><li>{t}</li>)}</ul></div></details>)}</div><div class="additional-skills"><span class="mono">ALSO IN MY ORBIT</span><p>{additionalSkills.join(' / ')}</p></div><div class="physics-heading"><h3>{copy.physicsTitle[0]}<br/><span>{copy.physicsTitle[1]}</span></h3><p>{copy.physicsNote}</p></div><div id="physics-zone" class="physics-zone" aria-label="Interactive tools experiment"><div class="physics-words">{physicsWords.map(t=><span data-physics-word data-cursor="DRAG">{t}</span>)}</div><span class="physics-caption mono">EXPERIMENT / GRAVITY IS OPTIONAL.</span></div></section>
+
+<section id="ecosystem" class="ecosystem section-pad" aria-labelledby="ecosystem-title">
+  <div class="chapter mono"><span>04 / DEVELOPMENT ECOSYSTEM</span><span>CONNECTED, NOT COLLECTED</span></div>
+  <div class="ecosystem-heading"><h2 id="ecosystem-title">{copy.ecosystemTitle.map((line) => <span data-reveal>{line}</span>)}</h2><p class="mono">Hover a node to expose the layer.<br />Open one to read the detail.</p></div>
+  <div class="ecosystem-map">
+    <svg class="node-lines" viewBox="0 0 1000 600" preserveAspectRatio="none" aria-hidden="true"><path d="M500 300L180 100M500 300L810 110M500 300L140 430M500 300L850 430M500 300L500 540" /></svg>
+    <div class="system-core" aria-hidden="true"><span>e.</span><small class="mono">THE CORE</small></div>
+    {skills.map((skill) => (
+      <details class={`skill-node ${skill.position}`} data-skill-node>
+        <summary><span class="mono">{skill.name}</span><strong>{skill.lead}</strong><span class="node-plus" aria-hidden="true">+</span></summary>
+        <div class="skill-detail"><p>{skill.detail}</p><ul>{skill.items.map((item) => <li>{item}</li>)}</ul></div>
+      </details>
+    ))}
+  </div>
+  <div class="additional-skills"><span class="mono">ALSO IN MY ORBIT</span><p>{additionalSkills.join(' / ')}</p></div>
+  <div class="physics-heading"><h3>{copy.physicsTitle[0]}<br /><span>{copy.physicsTitle[1]}</span></h3><p>{copy.physicsNote}</p></div>
+  <div id="physics-zone" class="physics-zone" aria-label="Interactive tools experiment">
+    <div class="physics-words">{physicsWords.map((word) => <span data-physics-word data-cursor="DRAG">{word}</span>)}</div>
+    <span class="physics-caption mono">EXPERIMENT / GRAVITY IS OPTIONAL.</span>
+  </div>
+</section>

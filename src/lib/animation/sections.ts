@@ -31,12 +31,15 @@ export function initSections(manager: MotionManager): () => void {
     });
     if (manager.state.isTouch) return;
     document.querySelectorAll<HTMLElement>('.depth-plane').forEach(element => {
-      gsap.fromTo(element, { scale: 0.94, y: 54, rotationX: 4, transformPerspective: 1200 }, {
-        scale: 1, y: 0, rotationX: 0, ease: 'none',
+      gsap.fromTo(element, { scaleX: 0.94, scaleY: 0.94, y: 54, rotationX: 4, transformPerspective: 1200 }, {
+        scaleX: 1, scaleY: 1, y: 0, rotationX: 0, ease: 'none',
         scrollTrigger: { trigger: element, start: 'top 95%', end: 'top 35%', scrub: 0.6 },
       });
     });
     document.querySelectorAll<HTMLElement>('[data-project-link] .project-image img').forEach(image => {
+      // WebGL owns project-image movement when an image belongs to a link.
+      // Keep the DOM geometry stable so the GPU plane can stay in sync.
+      if (image.closest('a')) return;
       gsap.fromTo(image, { yPercent: -3, scale: 1.07 }, {
         yPercent: 3, ease: 'none',
         scrollTrigger: { trigger: image, start: 'top bottom', end: 'bottom top', scrub: 0.7 },

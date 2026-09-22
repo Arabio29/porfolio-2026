@@ -1,4 +1,29 @@
 ---
-import {experience,practice} from '../../data/experience';import {copy} from '../../data/interface';
+import { experience, practice } from '../../data/experience';
+import { copy } from '../../data/interface';
 ---
-<section id="experience" class="experience section-pad"><div class="chapter mono"><span>03 / ENGINEERING PRACTICE</span><span>DEPTH OVER LABELS</span></div><div class="section-heading"><h2>{copy.experienceTitle.map(t=><span data-reveal>{t}</span>)}</h2><p>{copy.experienceNote}</p></div><div class="depth-stack">{practice.map(item=><article class="depth-plane"><div class="depth-rail mono"><span>{item.discipline}</span><span>↗</span></div><span class="depth-index" aria-hidden="true">{item.number}</span><h3>{item.name}</h3><p>{item.description}</p><span class="mono depth-tech">{item.technologies.join(' / ')}</span></article>)}</div>{experience.length>0?<div class="career-history">{experience.map(e=><article class="depth-plane"><p class="mono">{e.period} / {e.location}</p><h3>{e.role}</h3><h4>{e.company}</h4><p>{e.description}</p><p>{e.technologies.join(' / ')}</p></article>)}</div>:<p class="editor-note mono">{copy.historyNote}</p>}</section>
+
+<section id="experience" class="experience section-pad" aria-labelledby="experience-title">
+  <div class="chapter mono"><span>03 / ENGINEERING PRACTICE</span><span>DEPTH OVER LABELS</span></div>
+  <div class="section-heading">
+    <h2 id="experience-title">{copy.experienceTitle.map((line) => <span data-reveal>{line}</span>)}</h2>
+    <p>{copy.experienceNote}</p>
+  </div>
+  <div class="experience-coordinate mono"><span>CAREER / 00—NOW</span><span>THE LAYERS BEHIND THE INTERFACE</span></div>
+  <div class="depth-stack">
+    {practice.map((item) => (
+      <article class="depth-plane">
+        <div class="depth-rail mono"><span>{item.discipline}</span><span aria-hidden="true">↗</span></div>
+        <span class="depth-index" aria-hidden="true">{item.number}</span>
+        <h3>{item.name}</h3>
+        <p>{item.description}</p>
+        <span class="mono depth-tech">{item.technologies.join(' / ')}</span>
+      </article>
+    ))}
+  </div>
+  {experience.length > 0 ? (
+    <div class="career-history">
+      {experience.map((item) => <article class="depth-plane"><p class="mono">{item.period} / {item.location}</p><h3>{item.role}</h3><h4>{item.company}</h4><p>{item.description}</p><p>{item.technologies.join(' / ')}</p></article>)}
+    </div>
+  ) : <p class="editor-note mono">{copy.historyNote}</p>}
+</section>

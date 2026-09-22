@@ -1,6 +1,35 @@
 ---
 import { profile } from '../../data/profile';
 import { socials } from '../../data/socials';
-const items=[{label:'Go Home',href:'/'},{label:'Projects',href:'/#work'},{label:'Experience',href:'/#experience'},{label:'About',href:'/#about'},{label:'Contact',href:'/#contact'},{label:'GitHub',href:socials.github},...(socials.linkedin?[{label:'LinkedIn',href:socials.linkedin}]:[])];
+
+const items = [
+  { label: 'Go Home', href: '/' },
+  { label: 'Projects', href: '/#work' },
+  { label: 'Experience', href: '/#experience' },
+  { label: 'About', href: '/#about' },
+  { label: 'Contact', href: '/#contact' },
+  { label: 'GitHub', href: socials.github },
+  ...(socials.linkedin ? [{ label: 'LinkedIn', href: socials.linkedin }] : []),
+  ...(socials.website ? [{ label: 'Website', href: socials.website }] : []),
+  ...(socials.youtube ? [{ label: 'YouTube', href: socials.youtube }] : []),
+];
 ---
-<dialog id="command-palette" aria-labelledby="palette-title"><div class="palette-heading"><h2 id="palette-title">Where to?</h2><button data-close-palette aria-label="Close command palette">Esc</button></div><label class="sr-only" for="command-search">Find a destination</label><input id="command-search" type="search" placeholder="Type a destination…" autocomplete="off"/><div class="palette-items">{items.map((item,i)=><a href={item.href} data-command={item.label}><span>{item.label}</span><span class="mono">0{i+1} ↗</span></a>)}{profile.email&&<button data-command="Copy Email" data-copy-email={profile.email}>Copy Email ↗</button>}</div><p class="palette-empty" hidden>No matching destinations.</p><p class="mono palette-help">↑ ↓ TO MOVE · ENTER TO GO · ESC TO CLOSE</p></dialog>
+
+<dialog id="command-palette" aria-labelledby="palette-title">
+  <div class="palette-heading">
+    <div><span class="mono">SYSTEM / COMMAND</span><h2 id="palette-title">Where to?</h2></div>
+    <button data-close-palette aria-label="Close command palette">ESC</button>
+  </div>
+  <label class="sr-only" for="command-search">Find a destination</label>
+  <input id="command-search" type="search" placeholder="Type a destination..." autocomplete="off" />
+  <div class="palette-items">
+    {items.map((item, index) => (
+      <a href={item.href} data-command={item.label} target={item.href.startsWith('http') ? '_blank' : undefined} rel={item.href.startsWith('http') ? 'noopener noreferrer' : undefined}>
+        <span>{item.label}</span><span class="mono">0{index + 1} ↗</span>
+      </a>
+    ))}
+    {profile.email && <button data-command="Copy Email" data-copy-email={profile.email}>Copy Email <span>↗</span></button>}
+  </div>
+  <p class="palette-empty" hidden>No matching destinations.</p>
+  <p class="mono palette-help">↑ ↓ TO MOVE · ENTER TO GO · ESC TO CLOSE</p>
+</dialog>

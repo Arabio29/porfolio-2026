@@ -1,6 +1,83 @@
 ---
-import Base from '../../layouts/Base.astro';import {projects} from '../../data/projects';import {profile} from '../../data/profile';
-export function getStaticPaths(){return projects.map(project=>({params:{slug:project.slug},props:{project}}));}
-const {project}=Astro.props;const index=projects.findIndex(p=>p.slug===project.slug);const next=projects[(index+1)%projects.length];
+import Base from '../../layouts/Base.astro';
+import { projects } from '../../data/projects';
+import { profile } from '../../data/profile';
+
+export function getStaticPaths() {
+  return projects.map((project) => ({ params: { slug: project.slug }, props: { project } }));
+}
+
+const { project } = Astro.props;
+const index = projects.findIndex((item) => item.slug === project.slug);
+const next = projects.length > 1 ? projects[(index + 1) % projects.length] : undefined;
 ---
-<Base title={`${project.name} — ${profile.name}`} description={project.overview} image={project.image}><article class="case-study"><header class="case-hero section-pad"><a class="text-link" href="/#work">← Back to work</a><div class="chapter mono"><span>{project.category}</span><span>{project.year}</span></div><h1 data-reveal>{project.name}</h1><p class="case-lead">{project.description}</p><div class="case-tags mono">{project.stack.join(' / ')}</div></header><figure class="case-cover"><img src={project.image} alt={project.alt} width="1440" height="900" transition:name={`project-${project.slug}`} fetchpriority="high"/></figure><div class="case-body section-pad"><section class="case-row"><h2>Overview</h2><div><p>{project.overview}</p><h3>Role</h3><p>{project.role}</p></div></section><section class="case-row"><h2>The problem</h2><p>{project.problem}</p></section><section id="architecture" class="case-architecture"><div class="architecture-sticky"><span class="mono">SYSTEM ARCHITECTURE</span><h2>One system.<br/>Distinct layers.</h2><div class="architecture-diagram" aria-label="Content flows through input, experience and resilience layers">{project.architecture.map((a,i)=><div><span class="mono">0{i+1}</span><strong>{a.name}</strong><span aria-hidden="true">↓</span></div>)}</div></div><div class="architecture-steps">{project.architecture.map((a,i)=><section><span class="mono">LAYER / 0{i+1}</span><h3>{a.name}</h3><p>{a.detail}</p></section>)}</div></section><section class="case-row"><h2>The process</h2><ol class="process-list">{project.process.map(p=><li>{p}</li>)}</ol></section><section class="case-row"><h2>The solution</h2><p>{project.solution}</p></section><div class="case-screenshots">{project.screenshots.map(s=><figure><img src={s.src} alt={s.alt} loading="lazy" width="1440" height="900"/><figcaption class="mono">{s.caption}</figcaption></figure>)}</div><section class="case-row"><h2>The challenge</h2><p>{project.challenges}</p></section><section class="case-row"><h2>The outcome</h2><p>{project.results}</p></section><a class="next-project" href={projects.length>1?`/projects/${next.slug}/`:'/#lab'}><span class="mono">{projects.length>1?'NEXT PROJECT':'CONTINUE EXPLORING'}</span><strong>{projects.length>1?next.name:'Enter the lab'} ↗</strong></a></div></article></Base>
+
+<Base title={`${project.name} — ${profile.name}`} description={project.overview} image={project.image}>
+  <article class="case-study">
+    <header class="case-hero section-pad">
+      <a class="text-link" href="/#work" data-cursor="BACK TO WORK">← Back to work</a>
+      <div class="chapter mono"><span>{project.category}</span><span>{project.year}</span></div>
+      <p class="case-eyebrow mono">CASE STUDY / {String(index + 1).padStart(2, '0')}</p>
+      <h1 data-reveal>{project.name}</h1>
+      <p class="case-lead">{project.description}</p>
+      <div class="case-tags mono">{project.stack.join(' / ')}</div>
+      {(project.sourceUrl || project.sourceLinks) && <div class="case-sources"><span class="mono">PUBLIC REPOSITORIES</span>{project.sourceUrl && <a class="case-source mono" href={project.sourceUrl} target="_blank" rel="noopener noreferrer" data-cursor="OPEN SOURCE">VIEW SOURCE ↗</a>}{project.sourceLinks?.map((source) => <a class="case-source mono" href={source.url} target="_blank" rel="noopener noreferrer" data-cursor="OPEN SOURCE">{source.label} ↗</a>)}</div>}
+    </header>
+
+    <figure class="case-cover">
+      <img src={project.image} alt={project.alt} width="1600" height="1000" transition:name={`project-${project.slug}`} fetchpriority="high" />
+      <figcaption class="mono">{project.category} / ORIGINAL SYSTEM STUDY</figcaption>
+    </figure>
+
+    <div class="case-body section-pad">
+      <section class="case-row">
+        <h2>Overview</h2>
+        <div><p>{project.overview}</p><h3>Role</h3><p>{project.role}</p></div>
+      </section>
+      <section class="case-row">
+        <h2>The problem</h2>
+        <p>{project.problem}</p>
+      </section>
+
+      <section id="architecture" class="case-architecture" aria-labelledby="architecture-title">
+        <div class="architecture-sticky">
+          <span class="mono">SYSTEM ARCHITECTURE</span>
+          <h2 id="architecture-title">One system.<br />Distinct layers.</h2>
+          <div class="architecture-diagram" aria-label="Content flows through input, experience and resilience layers">
+            {project.architecture.map((layer, layerIndex) => <div><span class="mono">0{layerIndex + 1}</span><strong>{layer.name}</strong><span aria-hidden="true">↓</span></div>)}
+          </div>
+        </div>
+        <div class="architecture-steps">
+          {project.architecture.map((layer, layerIndex) => <section><span class="mono">LAYER / 0{layerIndex + 1}</span><h3>{layer.name}</h3><p>{layer.detail}</p></section>)}
+        </div>
+      </section>
+
+      <section class="case-row">
+        <h2>The process</h2>
+        <ol class="process-list">{project.process.map((step) => <li>{step}</li>)}</ol>
+      </section>
+      <section class="case-row">
+        <h2>The solution</h2>
+        <p>{project.solution}</p>
+      </section>
+
+      <div class="case-screenshots">
+        {project.screenshots.map((screenshot, screenshotIndex) => <figure><img src={screenshot.src} alt={screenshot.alt} loading="lazy" width="1600" height="1000" /><figcaption class="mono">{screenshot.caption}</figcaption><span class="case-shot-number">0{screenshotIndex + 1}</span></figure>)}
+      </div>
+
+      <section class="case-row">
+        <h2>The challenge</h2>
+        <p>{project.challenges}</p>
+      </section>
+      <section class="case-row case-result">
+        <h2>The result</h2>
+        <p>{project.results}</p>
+      </section>
+    </div>
+
+    <nav class="next-project section-pad" aria-label="Case study navigation">
+      <span class="mono">END OF TRANSMISSION</span>
+      {next ? <a href={`/projects/${next.slug}/`} class="next-project-link" data-cursor="NEXT PROJECT"><span class="mono">NEXT PROJECT ↗</span><strong>{next.name}</strong></a> : <a href="/#contact" class="next-project-link" data-cursor="LET’S TALK"><span class="mono">START A CONVERSATION ↗</span><strong>Build something.</strong></a>}
+    </nav>
+  </article>
+</Base>

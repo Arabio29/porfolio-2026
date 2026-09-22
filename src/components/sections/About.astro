@@ -1,4 +1,32 @@
 ---
-import {profile} from '../../data/profile';import {copy} from '../../data/interface';
+import { profile } from '../../data/profile';
+import { copy } from '../../data/interface';
 ---
-<section id="about" class="about section-pad"><div class="chapter mono"><span>06 / HUMAN, AFTER ALL</span><span>{copy.aboutLabel}</span></div><div class="about-grid"><div class="about-mark" aria-hidden="true">e<span>.</span><p class="mono">NOT A MACHINE.<br/>JUST VERY CURIOUS.</p></div><div class="about-copy"><h2 data-reveal>{profile.introduction}</h2><p>{profile.about}</p><p class="about-philosophy">{profile.philosophy}</p><div class="about-facts"><div><span class="mono">BASED IN</span><p>{profile.location} → {profile.reach}</p></div><div><span class="mono">CURIOUS ABOUT</span><p>{profile.learning.join(' / ')}</p></div><div><span class="mono">DRAWN TO</span><p>{profile.interests.join(' / ')}</p></div></div></div></div></section>
+
+<section id="about" class="about section-pad" aria-labelledby="about-title">
+  <div class="chapter mono"><span>06 / HUMAN, AFTER ALL</span><span>{copy.aboutLabel}</span></div>
+  <div class="about-grid">
+    <div class="about-mark" aria-hidden="true"><span>e</span><b>.</b><p class="mono">NOT A MACHINE.<br />JUST VERY CURIOUS.</p></div>
+    <div class="about-copy">
+      <p class="mono about-kicker">A SHORT CIRCUIT BREAKER</p>
+      <h2 id="about-title" data-reveal>{profile.introduction}</h2>
+      <p>{profile.about}</p>
+      <p class="about-philosophy">{profile.philosophy}</p>
+      <div class="about-facts">
+        <div><span class="mono">BASED IN</span><p>{profile.location} → {profile.reach}</p></div>
+        <div><span class="mono">CURIOUS ABOUT</span><p>{profile.learning.join(' / ')}</p></div>
+        <div><span class="mono">DRAWN TO</span><p>{profile.interests.join(' / ')}</p></div>
+        <div><span class="mono">STATUS</span><p>{profile.availability}</p></div>
+      </div>
+      <div class="about-direction">
+        <span class="mono">NEXT DIRECTION</span>
+        <p>{profile.currentDirection.join(' / ')}</p>
+      </div>
+      <div class="about-github-stats">
+        <span><strong>{profile.githubStats.publicRepositories}</strong><small class="mono">PUBLIC REPOSITORIES</small></span>
+        <span><strong>{profile.githubStats.followers}</strong><small class="mono">FOLLOWERS</small></span>
+        <a href="https://github.com/Arabio29" target="_blank" rel="noopener noreferrer" data-cursor="OPEN GITHUB"><strong>↗</strong><small class="mono">OPEN GITHUB</small></a>
+      </div>
+    </div>
+  </div>
+</section>

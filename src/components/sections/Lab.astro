@@ -1,4 +1,43 @@
 ---
-import {experiments} from '../../data/interface';
+import { experiments } from '../../data/interface';
 ---
-<section id="lab" class="lab section-pad"><div class="chapter mono"><span>05 / THE LAB</span><span>LESS CERTAINTY. MORE CURIOSITY.</span></div><div class="lab-intro"><h2 data-reveal>WHAT IF<span>?</span></h2><p>A place to pull at the edges.<br/>Small, live experiments built into this portfolio.</p></div><div class="lab-window"><div id="lab-track">{experiments.map(e=><article class={`experiment experiment-${e.className}`}><button class="experiment-preview" data-experiment={e.id} data-cursor="PLAY" aria-label={e.action}><div class="experiment-art" aria-hidden="true">{e.id==='reactor'?<div class="lab-orbits"><i/><i/><i/><i/><span>+</span></div>:e.id==='type'?<div class="lab-type">Aa<span>Bb</span></div>:<div class="lab-signal">{Array.from({length:25},(_,i)=><i style={`--i:${i}`}/>)}</div><span class="mono experiment-action">{e.action} ↗</span></button><div class="experiment-meta"><span class="mono">{e.number} / {e.kind}</span><h3>{e.title}</h3><p>{e.description}</p></div></article>)}</div></div></section>
+
+<section id="lab" class="lab section-pad">
+  <div class="chapter mono">
+    <span>05 / THE LAB</span>
+    <span>LESS CERTAINTY. MORE CURIOSITY.</span>
+  </div>
+
+  <div class="lab-intro">
+    <h2 data-reveal>WHAT IF<span>?</span></h2>
+    <p>A place to pull at the edges.<br />Small, live experiments built into this portfolio.</p>
+  </div>
+
+  <div class="lab-window">
+    <div id="lab-track">
+      {experiments.map((experiment) => (
+        <article class={`experiment experiment-${experiment.className}`}>
+          <button class="experiment-preview" data-experiment={experiment.id} data-cursor="PLAY" aria-label={experiment.action}>
+            <div class="experiment-art" aria-hidden="true">
+              {experiment.id === 'reactor' && (
+                <div class="lab-orbits"><i></i><i></i><i></i><i></i><span>+</span></div>
+              )}
+              {experiment.id === 'type' && <div class="lab-type">Aa<span>Bb</span></div>}
+              {experiment.id === 'signal' && (
+                <div class="lab-signal">
+                  {Array.from({ length: 25 }, (_, index) => <i style={`--i:${index}`}></i>)}
+                </div>
+              )}
+            </div>
+            <span class="mono experiment-action">{experiment.action} ↗</span>
+          </button>
+          <div class="experiment-meta">
+            <span class="mono">{experiment.number} / {experiment.kind}</span>
+            <h3>{experiment.title}</h3>
+            <p>{experiment.description}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

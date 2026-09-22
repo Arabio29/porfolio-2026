@@ -16,6 +16,12 @@ export async function initWebGL(motion: MotionManager): Promise<() => void> {
   document.documentElement.dataset.webgl = 'unavailable';
   if (canvas) canvas.style.visibility = 'hidden';
   if (!canvas || motion.state.reducedMotion) return noop;
+  const hasScene = Boolean(
+    document.querySelector('#hero') ||
+    document.querySelector('#contact') ||
+    document.querySelector('img[data-webgl-image], [data-webgl-image] img'),
+  );
+  if (!hasScene) return noop;
   let experience: WebGLExperience | undefined;
   let renderer: WebGLRenderer | undefined;
   try {
@@ -137,6 +143,7 @@ class WebGLExperience {
   private frame = (time: number, delta: number) => {
     if (this.disposed || document.hidden) return;
     const { state } = this.motion;
+    const compactViewport = state.isTouch || state.viewport.width < 768;
     if (state.reducedMotion) { this.fail(); return; }
     if (!this.visible.size) { this.canvas.style.visibility = 'hidden'; return; }
     const dt = clamp(delta, 0, .05);
@@ -158,8 +165,14 @@ class WebGLExperience {
         const worldHeight = 2 * Math.tan(this.camera.fov * Math.PI / 360) * this.camera.position.z;
         const worldWidth = worldHeight * this.camera.aspect;
         // Right-side composition protects the left-aligned professional identity.
-        this.reactor.group.position.set(worldWidth * (state.isTouch ? .16 : .22), worldHeight * .05, 0);
-        this.reactor.group.scale.setScalar(state.isTouch ? .67 : 1);
+        // Mobile keeps the reactor as a peripheral signal so the identity remains
+        // the first readable layer instead of turning the scene into wallpaper.
+        this.reactor.group.position.set(
+          worldWidth * (compactViewport ? .46 : .22),
+          worldHeight * (compactViewport ? -.14 : .05),
+          0,
+        );
+        this.reactor.group.scale.setScalar(compactViewport ? .24 : 1);
         this.renderer.render(this.scene, this.camera);
       }
       if (imageCount && this.gallery) {
@@ -169,7 +182,7 @@ class WebGLExperience {
       if (this.shaderFailed) { this.fail(); return; }
       this.hasRendered = true;
       this.canvas.style.visibility = 'visible';
-      this.canvas.style.opacity = '1';
+      this.canvas.style.opacity = imageCount ? '1' : compactViewport ? '.24' : '1';
       document.documentElement.dataset.webgl = 'ready';
     } catch { this.fail(); }
   };

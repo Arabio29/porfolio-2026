@@ -3,12 +3,20 @@ import { initMotion } from './animation';
 
 let cleanupPage: (() => void) | undefined;
 let generation = 0;
+let initializedRoot: HTMLElement | null = null;
 
 async function initialize() {
   cleanupPage?.();
   const current = ++generation;
   const controller = new AbortController();
   const { signal } = controller;
+  const preloader = document.querySelector<HTMLElement>('[data-preloader]');
+  try {
+    if (preloader && sessionStorage.getItem('portfolio-booted') === '1') preloader.classList.add('preloader-skip');
+    sessionStorage.setItem('portfolio-booted', '1');
+  } catch {
+    // Storage can be unavailable in privacy-restricted contexts; CSS remains the fallback.
+  }
   const dialog = document.querySelector<HTMLDialogElement>('#command-palette');
   const search = document.querySelector<HTMLInputElement>('#command-search');
   const commands = Array.from(document.querySelectorAll<HTMLElement>('[data-command]'));
@@ -80,7 +88,7 @@ async function initialize() {
     }
     button.addEventListener('click', () => {
       variation++;
-      if(button.dataset.experiment==='reactor') gsap.to(target,{rotation:variation*55,scale:variation%2?1.15:1,duration:reduced.matches?0:.6});
+      if(button.dataset.experiment==='reactor') gsap.to(target,{rotation:variation*55,scaleX:variation%2?1.15:1,scaleY:variation%2?1.15:1,duration:reduced.matches?0:.6});
       if(button.dataset.experiment==='type') gsap.to(target,{skewX:variation%2?-16:0,letterSpacing:variation%2?'.02em':'-.07em',duration:reduced.matches?0:.5});
       if(button.dataset.experiment==='signal') target.querySelectorAll('i').forEach((bar,i)=>gsap.to(bar,{height:30+((i*37+variation*53)%140),opacity:.35+((i+variation)%5)*.13,duration:reduced.matches?0:.4}));
       button.dataset.variation=String(variation);
@@ -97,5 +105,14 @@ async function initialize() {
   try { const cleanup = await initMotion(); if(current !== generation) cleanup(); else motionCleanup = cleanup; }
   catch(error) { console.warn('Enhanced motion unavailable; static content remains accessible.',error); }
 }
-document.addEventListener('astro:page-load', initialize);
-document.addEventListener('astro:before-swap', () => {generation++;cleanupPage?.();cleanupPage=undefined;});
+function boot() {
+  const root = document.querySelector<HTMLElement>('#main');
+  if (!root || root === initializedRoot) return;
+  initializedRoot = root;
+  void initialize();
+}
+
+document.addEventListener('astro:page-load', boot);
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, { once: true });
+else boot();
+document.addEventListener('astro:before-swap', () => { generation++; initializedRoot = null; cleanupPage?.(); cleanupPage = undefined; });

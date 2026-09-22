@@ -24,7 +24,15 @@ export async function initMotion(): Promise<() => void> {
     if (destroyed) return;
     clearEffects();
     // Each scope owns its styles/listeners; native HTML remains the fallback.
-    effects.push(initSections(manager), initCursor(manager), initPhysics(manager));
+    try {
+      effects.push(initSections(manager));
+      effects.push(initCursor(manager));
+      effects.push(initPhysics(manager));
+    } catch (error) {
+      // A failed enhancement must still dispose enhancements that ran before it.
+      clearEffects();
+      throw error;
+    }
     if (manager.state.reducedMotion) return;
     const token = generation;
     void import('../webgl/experience').then(async ({ initWebGL }) => {

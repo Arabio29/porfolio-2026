@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" role="img" aria-labelledby="title desc">
+  <title id="title">Reactor structural detail</title>
+  <desc id="desc">A close-up of blue and chrome orbital structures with engineering measurements.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#080808"/><stop offset=".52" stop-color="#101936"/><stop offset="1" stop-color="#080808"/></linearGradient>
+    <linearGradient id="chrome" x1="0" x2="1"><stop stop-color="#63687b"/><stop offset=".25" stop-color="#f1efe9"/><stop offset=".5" stop-color="#70778a"/><stop offset=".72" stop-color="#f1efe9"/><stop offset="1" stop-color="#363b4d"/></linearGradient>
+  </defs>
+  <rect width="1600" height="1000" fill="url(#bg)"/>
+  <g transform="translate(620 500) rotate(-22)" fill="none">
+    <ellipse rx="540" ry="160" stroke="#2957ff" stroke-width="20"/>
+    <ellipse rx="510" ry="120" stroke="url(#chrome)" stroke-width="7" stroke-dasharray="280 24 90 18"/>
+    <ellipse rx="330" ry="410" stroke="#2957ff" stroke-opacity=".75" stroke-width="12"/>
+    <ellipse rx="290" ry="350" stroke="url(#chrome)" stroke-width="4" stroke-dasharray="90 20"/>
+    <path d="M-540 0H540M0-430V430" stroke="#f1efe9" stroke-opacity=".25" stroke-dasharray="2 22"/>
+    <g stroke="#2957ff" stroke-width="8"><path d="M-360-210L-120-70M360-210L120-70M-360 210L-120 70M360 210L120 70"/></g>
+  </g>
+  <g fill="#f1efe9" font-family="monospace" font-size="18" letter-spacing="4"><text x="80" y="112">STRUCTURAL DETAIL / 02</text><text x="80" y="900">CHROME / COBALT / CONTROLLED ENERGY</text></g>
+</svg>
