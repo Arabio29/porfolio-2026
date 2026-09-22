@@ -1,0 +1,4 @@
+---
+import {copy} from '../../data/interface';
+---
+<section id="manifesto" class="manifesto section-pad"><div class="chapter mono"><span>01 / THE INTENT</span><span>ENGINEERING WITH FEELING</span></div><h2>{copy.manifesto.map((line,i)=><span data-reveal class:list={['manifesto-line',{'outline-word':i===2}]}>{line}</span>)}</h2><div class="manifesto-foot"><span class="asterisk" aria-hidden="true">✳</span><p>{copy.manifestoNote}</p><span class="mono">ENGINEERING<br/>INTERFACES<br/>SYSTEMS<br/>EXPERIENCES</span></div></section>

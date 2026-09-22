@@ -1,0 +1,4 @@
+---
+import { navigation,copy } from '../../data/interface';
+---
+<header class="site-header"><a class="wordmark" href="/" aria-label="Eliasib home">e<span class="brand-dot">.</span></a><span class="header-status mono"><i></i>{copy.system}</span><nav aria-label="Main navigation">{navigation.map(item=><a href={`/#${item.id}`} data-nav={item.id}>{item.label}<span>↗</span></a>)}</nav><button class="command-toggle" data-open-palette aria-label="Open command palette"><span>⌘</span> K</button></header>

@@ -1,0 +1,4 @@
+---
+import {profile} from '../../data/profile';import {copy} from '../../data/interface';
+---
+<section id="about" class="about section-pad"><div class="chapter mono"><span>06 / HUMAN, AFTER ALL</span><span>{copy.aboutLabel}</span></div><div class="about-grid"><div class="about-mark" aria-hidden="true">e<span>.</span><p class="mono">NOT A MACHINE.<br/>JUST VERY CURIOUS.</p></div><div class="about-copy"><h2 data-reveal>{profile.introduction}</h2><p>{profile.about}</p><p class="about-philosophy">{profile.philosophy}</p><div class="about-facts"><div><span class="mono">BASED IN</span><p>{profile.location} → {profile.reach}</p></div><div><span class="mono">CURIOUS ABOUT</span><p>{profile.learning.join(' / ')}</p></div><div><span class="mono">DRAWN TO</span><p>{profile.interests.join(' / ')}</p></div></div></div></div></section>

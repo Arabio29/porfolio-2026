@@ -1,0 +1,14 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import { profile } from '../data/profile';
+import { socials } from '../data/socials';
+import Navigation from '../components/navigation/Navigation.astro';
+import Palette from '../components/navigation/Palette.astro';
+import '../styles/global.css';
+interface Props { title?: string; description?: string; image?: string; }
+const {title=`${profile.name} — ${profile.role}`,description=profile.description,image='/images/og.webp'}=Astro.props;
+const canonical=new URL(Astro.url.pathname, Astro.site);
+const schema={'@context':'https://schema.org','@type':'Person',name:profile.name,jobTitle:profile.role,description:profile.description,url:new URL('/',Astro.site).href,sameAs:Object.values(socials).filter(Boolean)};
+---
+<!doctype html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><meta name="theme-color" content="#080808"/><title>{title}</title><meta name="description" content={description}/><link rel="canonical" href={canonical}/><link rel="icon" type="image/svg+xml" href="/favicon.svg"/><meta property="og:type" content="website"/><meta property="og:title" content={title}/><meta property="og:description" content={description}/><meta property="og:url" content={canonical}/><meta property="og:image" content={new URL(image,Astro.site)}/><meta name="twitter:card" content="summary_large_image"/><meta name="twitter:title" content={title}/><meta name="twitter:description" content={description}/><meta name="twitter:image" content={new URL(image,Astro.site)}/><script type="application/ld+json" set:html={JSON.stringify(schema).replace(/</g,'\u003c')}/><ClientRouter/></head>
+<body><a class="skip-link" href="#main">Skip to content</a><Navigation/><canvas id="webgl-canvas" aria-hidden="true"></canvas><div class="reading-progress" data-progress aria-hidden="true"></div><main id="main"><slot/></main><Palette/><div id="cursor" aria-hidden="true"><span></span></div><div id="toast" role="status" aria-live="polite"></div><aside id="dev-panel" hidden aria-label="Developer diagnostics"><button data-close-dev aria-label="Close diagnostics">×</button><pre></pre></aside><script>import '../lib/client';</script></body></html>
