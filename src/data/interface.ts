@@ -14,7 +14,6 @@ export const copy = {
   workNote: 'A small, curated set of public work: this portfolio system, an adoption API in C#, an Astro site for Fundación Princesas Guerreras and a loan-management stack built with Angular and Spring Boot.',
   experienceTitle: ['THINK IN SYSTEMS.', 'BUILD FOR PEOPLE.'],
   experienceNote: 'Practice, not a list of titles. The technical disciplines behind my work.',
-  historyNote: 'Company names and employment dates are intentionally omitted until they are supplied directly. The practice above is grounded in the public engineering profile and repositories.',
   ecosystemTitle: ['ONE CONNECTED', 'ECOSYSTEM.'],
   physicsTitle: ['SERIOUS TOOLS.', 'A LITTLE GRAVITY.'],
   physicsNote: 'A brief experiment in letting go. Scroll through, or push the pieces. The content remains readable if physics is unavailable.',

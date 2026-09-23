@@ -41,7 +41,34 @@ async function initialize() {
   search?.addEventListener('input', filter, {signal});
   dialog?.addEventListener('click', e => { if(e.target === dialog) close(); }, {signal});
   dialog?.addEventListener('cancel', () => previouslyFocused?.focus({preventScroll:true}), {signal});
-  for(const item of commands) item.addEventListener('click', () => dialog?.close(), {signal});
+  for (const item of commands) {
+    if (item instanceof HTMLAnchorElement && item.target === '_blank') continue;
+    item.addEventListener('click', () => dialog?.close(), { signal });
+  }
+  const navigateHash = (event: Event) => {
+    const pointer = event as MouseEvent;
+    if (pointer.defaultPrevented || pointer.button !== 0 || pointer.metaKey || pointer.ctrlKey || pointer.shiftKey || pointer.altKey) return;
+    const link = (event.target as Element | null)?.closest<HTMLAnchorElement>('a[href]');
+    if (!link) return;
+    const url = new URL(link.href, window.location.href);
+    if (url.origin !== window.location.origin || url.pathname !== window.location.pathname || !url.hash) return;
+    const target = document.getElementById(decodeURIComponent(url.hash.slice(1)));
+    if (!target) return;
+    event.preventDefault();
+    history.pushState(null, '', `${url.pathname}${url.hash}`);
+    const detail = { target, offset: -20, handled: false };
+    document.dispatchEvent(new CustomEvent('motion:scroll-to', { detail }));
+    if (!detail.handled) {
+      let documentTop = 0;
+      let current: HTMLElement | null = target;
+      while (current) {
+        documentTop += current.offsetTop;
+        current = current.offsetParent as HTMLElement | null;
+      }
+      window.scrollTo({ top: documentTop - 20, behavior: 'auto' });
+    }
+  };
+  document.addEventListener('click', navigateHash, { signal });
   let sequence = '';
   const dev = document.querySelector<HTMLElement>('#dev-panel');
   document.querySelector('[data-close-dev]')?.addEventListener('click', () => { if(dev) dev.hidden = true; }, {signal});

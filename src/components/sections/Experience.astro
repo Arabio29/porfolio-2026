@@ -1,5 +1,5 @@
 ---
-import { experience, practice } from '../../data/experience';
+import { experience } from '../../data/experience';
 import { copy } from '../../data/interface';
 ---
 
@@ -14,27 +14,22 @@ import { copy } from '../../data/interface';
       </div>
       <div class="experience-game-board" data-experience-board tabindex="0" role="group" aria-label="Desert driving world controlled by arrow keys or W A S D" aria-describedby="experience-game-instructions">
         <canvas data-experience-game-canvas aria-hidden="true"></canvas>
-        <div class="experience-game-overlay" aria-hidden="true"><span class="mono">DESERT / FREE ROAM</span><span class="mono" data-game-status>CAR / READY</span></div>
+        <canvas data-experience-game-hud aria-hidden="true"></canvas>
+        <div class="experience-game-base" data-base-panel hidden aria-live="polite">
+          <div class="experience-base-head mono"><span data-base-index>01</span><span data-base-discipline></span></div>
+          <h4 data-base-name></h4>
+          <p data-base-description></p>
+          <span class="mono experience-base-tech" data-base-technologies></span>
+        </div>
+        <div class="experience-game-overlay" aria-hidden="true"><span class="mono">DESERT / 3 BASES</span><span class="mono" data-game-status>CAR / READY</span></div>
       </div>
-      <p id="experience-game-instructions" class="experience-game-instructions">Focus the desert, then drive with the arrow keys or <strong>W A S D</strong>. Press <strong>R</strong> to return to the origin. The world listens only while this section is visible.</p>
+      <p id="experience-game-instructions" class="experience-game-instructions">Focus the desert, then drive with the arrow keys or <strong>W A S D</strong> — the animated key cluster mirrors your input. Three bases hold the practice layers — stop next to one to read it. The sector map in the top-left corner tracks the car, the solids and the bases. Dunes, cacti, rocks and bases are solid: you will slide around them. Press <strong>R</strong> to return to the origin. The world listens only while this section is visible.</p>
     </div>
     <p>{copy.experienceNote}</p>
   </div>
-  <div class="experience-coordinate mono"><span>CAREER / 00—NOW</span><span>THE LAYERS BEHIND THE INTERFACE</span></div>
-  <div class="depth-stack">
-    {practice.map((item) => (
-      <article class="depth-plane">
-        <div class="depth-rail mono"><span>{item.discipline}</span><span aria-hidden="true">↗</span></div>
-        <span class="depth-index" aria-hidden="true">{item.number}</span>
-        <h3>{item.name}</h3>
-        <p>{item.description}</p>
-        <span class="mono depth-tech">{item.technologies.join(' / ')}</span>
-      </article>
-    ))}
-  </div>
-  {experience.length > 0 ? (
+  {experience.length > 0 && (
     <div class="career-history">
       {experience.map((item) => <article class="depth-plane"><p class="mono">{item.period} / {item.location}</p><h3>{item.role}</h3><h4>{item.company}</h4><p>{item.description}</p><p>{item.technologies.join(' / ')}</p></article>)}
     </div>
-  ) : <p class="editor-note mono">{copy.historyNote}</p>}
+  )}
 </section>

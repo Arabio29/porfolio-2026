@@ -38,6 +38,7 @@ export class MotionManager {
     this.listen(window, 'scroll', this.scroll);
     this.listen(window, 'pointermove', this.pointer);
     this.listen(document, 'visibilitychange', this.visibility);
+    this.listen(document, 'motion:scroll-to', this.anchorScroll);
     for (const query of ['(pointer: coarse)', '(prefers-reduced-motion: reduce)']) {
       this.listen(window.matchMedia(query), 'change', this.updatePreferences);
     }
@@ -52,7 +53,10 @@ export class MotionManager {
   private configureScroll = () => {
     this.lenis?.destroy(); this.lenis = undefined;
     if (!this.state.isTouch && !this.state.reducedMotion) {
-      this.lenis = new Lenis({ autoRaf: false, smoothWheel: true, syncTouch: false, anchors: true });
+      // `anchors` stays off: links are authored as `/#section`, which Lenis
+      // does not resolve, yet it would still preventDefault and swallow the
+      // navigation. The click handler in client.ts owns anchor scrolling.
+      this.lenis = new Lenis({ autoRaf: false, smoothWheel: true, syncTouch: false, anchors: false });
       this.lenis.on('scroll', ScrollTrigger.update);
       if (document.hidden) this.lenis.stop();
     }
@@ -72,6 +76,20 @@ export class MotionManager {
       this.state.mouse.velocityX = this.state.mouse.velocityY = this.state.scroll.velocity = 0;
       this.lenis?.start(); gsap.ticker.add(this.tick);
     }
+  };
+  private anchorScroll = (event: Event) => {
+    const detail = (event as CustomEvent<{ target: HTMLElement; offset?: number; handled?: boolean }>).detail;
+    const target = detail?.target;
+    if (!target || !this.lenis) return;
+    detail.handled = true;
+    // Lenis resolves the element position itself, which stays correct while
+    // ScrollTrigger keeps a pin spacer in the flow.
+    this.lenis.scrollTo(target, {
+      offset: detail.offset ?? -20,
+      duration: this.state.reducedMotion ? 0 : 1.1,
+      force: true,
+      lock: true,
+    });
   };
   onPreferencesChange(callback: () => void): () => void {
     if (!this.destroyed) this.preferences.add(callback);

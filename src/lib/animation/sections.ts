@@ -58,10 +58,10 @@ export function initSections(manager: MotionManager): () => void {
     });
     const workWindow = document.querySelector<HTMLElement>('[data-work-window]');
     const workTrack = workWindow?.querySelector<HTMLElement>('[data-horizontal-track]');
-    if (workWindow && workTrack && !manager.state.isTouch && workTrack.scrollWidth > workWindow.clientWidth) {
-      workTrack.dataset.x = '0';
+    let horizontal: gsap.core.Tween | undefined;
+    if (workWindow && workTrack && !manager.state.isTouch && workTrack.scrollWidth > workWindow.clientWidth) {      workTrack.dataset.x = '0';
       const travel = () => Math.max(0, workTrack.scrollWidth - workWindow.clientWidth);
-      const horizontal = gsap.to(workTrack, {
+      horizontal = gsap.to(workTrack, {
         x: () => -travel(),
         ease: 'none',
         onUpdate: () => {
@@ -84,7 +84,7 @@ export function initSections(manager: MotionManager): () => void {
           },
         },
       });
-      extra.push(() => horizontal.scrollTrigger?.kill());
+      extra.push(() => horizontal?.scrollTrigger?.kill());
     }
     const lab = document.querySelector<HTMLElement>('#lab');
     const track = document.querySelector<HTMLElement>('#lab-track');
