@@ -1,0 +1,23 @@
+---
+import { techGroups } from '../../data/tech';
+---
+
+<div class="tech-wall" data-tech-orbit>
+  <div class="tech-focus" data-tech-focus aria-hidden="true"><span class="mono">FOCUS</span><strong data-tech-focus-name>29 SIGNALS</strong></div>
+  <div class="tech-sphere" data-tech-sphere>
+  {techGroups.map((group) => (
+    <div class="tech-group">
+      <div class="tech-group-head mono"><span>{group.label}</span><span>{group.note}</span></div>
+      <ul>
+        {group.items.map((item) => (
+          <li data-reveal data-tech-tile={item.name}>
+            {item.icon ? <Fragment set:html={item.icon} /> : <span class="tech-glyph" aria-hidden="true">{item.glyph}</span>}
+            <span class="mono">{item.name}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  ))}
+  </div>
+  <p class="tech-legend mono" aria-hidden="true">LANGUAGES · BACKEND · DEVOPS · DRIVERS · AI — DRAG TO SPIN</p>
+</div>

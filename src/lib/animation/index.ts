@@ -2,6 +2,8 @@ import { MotionManager } from './motion-manager';
 import { initSections } from './sections';
 import { initCursor } from './cursor';
 import { initPhysics } from './physics';
+import { initEcosystem } from './ecosystem';
+import { initTechOrbit } from './tech-orbit';
 
 export { MotionManager } from './motion-manager';
 export type { MotionState, FrameCallback } from './motion-manager';
@@ -26,6 +28,8 @@ export async function initMotion(): Promise<() => void> {
     // Each scope owns its styles/listeners; native HTML remains the fallback.
     try {
       effects.push(initSections(manager));
+      effects.push(initEcosystem(manager));
+      effects.push(initTechOrbit(manager));
       effects.push(initCursor(manager));
       effects.push(initPhysics(manager));
     } catch (error) {

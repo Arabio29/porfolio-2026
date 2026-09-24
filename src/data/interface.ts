@@ -13,7 +13,7 @@ export const copy = {
   workTitle: ['NOT JUST CODE.', 'WORK THAT WORKS.'],
   workNote: 'A small, curated set of public work: this portfolio system, an adoption API in C#, an Astro site for Fundación Princesas Guerreras and a loan-management stack built with Angular and Spring Boot.',
   experienceTitle: ['THINK IN SYSTEMS.', 'BUILD FOR PEOPLE.'],
-  experienceNote: 'Practice, not a list of titles. The technical disciplines behind my work.',
+  experienceNote: 'Practice first, then the record: real companies, business-critical systems, real workflows.',
   ecosystemTitle: ['ONE CONNECTED', 'ECOSYSTEM.'],
   physicsTitle: ['SERIOUS TOOLS.', 'A LITTLE GRAVITY.'],
   physicsNote: 'A brief experiment in letting go. Scroll through, or push the pieces. The content remains readable if physics is unavailable.',

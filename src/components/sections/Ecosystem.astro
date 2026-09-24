@@ -1,23 +1,63 @@
 ---
 import { skills, additionalSkills, physicsWords } from '../../data/skills';
 import { copy } from '../../data/interface';
+import TechWall from './TechWall.astro';
 ---
 
 <section id="ecosystem" class="ecosystem section-pad" aria-labelledby="ecosystem-title">
   <div class="chapter mono"><span>04 / DEVELOPMENT ECOSYSTEM</span><span>CONNECTED, NOT COLLECTED</span></div>
-  <div class="ecosystem-heading"><h2 id="ecosystem-title">{copy.ecosystemTitle.map((line) => <span data-reveal>{line}</span>)}</h2><p class="mono">Hover a node to expose the layer.<br />Open one to read the detail.</p></div>
-  <div class="ecosystem-map">
-    <svg class="node-lines" viewBox="0 0 1000 600" preserveAspectRatio="none" aria-hidden="true"><path d="M500 300L180 100M500 300L810 110M500 300L140 430M500 300L850 430M500 300L500 540" /></svg>
-    <div class="system-core" aria-hidden="true"><span>e.</span><small class="mono">THE CORE</small></div>
-    {skills.map((skill) => (
-      <details class={`skill-node ${skill.position}`} data-skill-node>
-        <summary><span class="mono">{skill.name}</span><strong>{skill.lead}</strong><span class="node-plus" aria-hidden="true">+</span></summary>
-        <div class="skill-detail"><p>{skill.detail}</p><ul>{skill.items.map((item) => <li>{item}</li>)}</ul></div>
+
+  <div class="ecosystem-heading">
+    <h2 id="ecosystem-title" data-ecosystem-title>
+      {copy.ecosystemTitle.map((line, i) => (
+        <span class={`eco-line${i === 1 ? ' eco-outline' : ''}`} data-eco-line><span data-eco-chars>{line}</span></span>
+      ))}
+    </h2>
+    <div class="ecosystem-side">
+      <p class="mono">Hover a node to expose the layer.<br />Open one to read the detail.</p>
+      <p class="eco-readout mono" data-eco-readout aria-hidden="true">SYS.LIVE ▪ NODES 05 ▪ LINK ---</p>
+      <p class="sr-only">Interactive diagram of five connected engineering layers. All content is available as text below.</p>
+    </div>
+  </div>
+
+  <div class="ecosystem-stage" data-ecosystem-stage>
+    <canvas class="ecosystem-canvas" data-ecosystem-canvas aria-hidden="true"></canvas>
+    <div class="ecosystem-glow" data-ecosystem-glow aria-hidden="true"></div>
+
+    <div class="system-core" data-ecosystem-core aria-hidden="true">
+      <span class="core-rings" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span class="core-label" data-ecosystem-core-label>e.</span>
+      <small class="mono" data-ecosystem-core-sub>THE CORE</small>
+    </div>
+
+    {skills.map((skill, i) => (
+      <details class={`skill-node ${skill.position}`} data-skill-node={skill.id} data-cursor="OPEN">
+        <summary data-magnetic>
+          <span class="node-index mono">0{i + 1} — {skill.name}</span>
+          <strong>{skill.lead}</strong>
+          <span class="node-meta mono">{skill.items.length} signals</span>
+          <span class="node-plus" aria-hidden="true">+</span>
+        </summary>
+        <div class="skill-detail">
+          <p>{skill.detail}</p>
+          <ul>{skill.items.map((item) => <li>{item}</li>)}</ul>
+        </div>
       </details>
     ))}
   </div>
-  <div class="additional-skills"><span class="mono">ALSO IN MY ORBIT</span><p>{additionalSkills.join(' / ')}</p></div>
+
+  <div class="orbit-strip">
+    <span class="mono orbit-label">ALSO IN MY ORBIT</span>
+    <div class="orbit-marquee" data-orbit-marquee>
+      <div class="orbit-track" data-orbit-track>
+        <p>{additionalSkills.join('  /  ')}  /&nbsp;</p>
+        <p aria-hidden="true">{additionalSkills.join('  /  ')}  /&nbsp;</p>
+      </div>
+    </div>
+  </div>
+
   <div class="physics-heading"><h3>{copy.physicsTitle[0]}<br /><span>{copy.physicsTitle[1]}</span></h3><p>{copy.physicsNote}</p></div>
+  <TechWall />
   <div id="physics-zone" class="physics-zone" aria-label="Interactive tools experiment">
     <div class="physics-words">{physicsWords.map((word) => <span data-physics-word data-cursor="DRAG">{word}</span>)}</div>
     <span class="physics-caption mono">EXPERIMENT / GRAVITY IS OPTIONAL.</span>

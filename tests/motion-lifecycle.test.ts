@@ -1,11 +1,13 @@
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
-const state = vi.hoisted(() => ({ managers: [] as any[], sectionClean: vi.fn(), cursorClean: vi.fn(), physicsClean: vi.fn(), webglClean: vi.fn(), webglInit: vi.fn(), prefs: undefined as undefined | (() => void) }));
+const state = vi.hoisted(() => ({ managers: [] as any[], sectionClean: vi.fn(), ecosystemClean: vi.fn(), orbitClean: vi.fn(), cursorClean: vi.fn(), physicsClean: vi.fn(), webglClean: vi.fn(), webglInit: vi.fn(), prefs: undefined as undefined | (() => void) }));
 vi.mock('../src/lib/animation/motion-manager', () => ({ MotionManager: class {
   state = { reducedMotion: false, isTouch: false }; destroy = vi.fn();
   constructor() { state.managers.push(this); }
   onPreferencesChange(fn: () => void) { state.prefs = fn; return vi.fn(); }
 } }));
 vi.mock('../src/lib/animation/sections', () => ({ initSections: () => state.sectionClean }));
+vi.mock('../src/lib/animation/ecosystem', () => ({ initEcosystem: () => state.ecosystemClean }));
+vi.mock('../src/lib/animation/tech-orbit', () => ({ initTechOrbit: () => state.orbitClean }));
 vi.mock('../src/lib/animation/cursor', () => ({ initCursor: vi.fn(() => state.cursorClean) }));
 import { initCursor } from '../src/lib/animation/cursor';
 it('cleans earlier enhancements if a later enhancement fails to initialize', async () => {
@@ -34,6 +36,8 @@ it('reinitializes preferences and disposes all owned effects before Astro swaps'
   document.dispatchEvent(new Event('astro:before-swap'));
   expect(state.managers[0].destroy).toHaveBeenCalledOnce();
   expect(state.sectionClean).toHaveBeenCalledTimes(2);
+  expect(state.ecosystemClean).toHaveBeenCalledTimes(2);
+  expect(state.orbitClean).toHaveBeenCalledTimes(2);
   expect(state.cursorClean).toHaveBeenCalledTimes(2); expect(state.physicsClean).toHaveBeenCalledTimes(2);
   cleanup(); expect(state.managers[0].destroy).toHaveBeenCalledOnce();
 });
