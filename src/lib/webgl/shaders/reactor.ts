@@ -37,7 +37,7 @@ void main() {
   float band = smoothstep(0.5, 0.62, sin(n.y * 9.0 + n.x * 3.0) * 0.5 + 0.5);
   vec3 chrome = mix(vec3(0.045,0.06,0.085), vec3(0.85,0.89,0.97), band);
   vec3 color = mix(uColor * (0.28 + diffuse * 1.1), chrome * (0.35 + diffuse * 0.8), uChrome);
-  color += vec3(0.30,0.44,1.0) * fresnel * 0.8 + specular * vec3(1.0);
+  color += vec3(1.0,1.0,0.15) * fresnel * 0.8 + specular * vec3(1.0);
   gl_FragColor = vec4(color, 1.0);
   #include <tonemapping_fragment>
   #include <colorspace_fragment>
@@ -74,6 +74,6 @@ void main() {
   float d = length(gl_PointCoord - 0.5);
   if (d > 0.5) discard;
   float alpha = (1.0 - smoothstep(0.12, 0.5, d)) * vAlpha;
-  gl_FragColor = vec4(mix(vec3(0.12,0.28,1.0),vec3(0.8,0.89,1.0),step(0.83,vSeed)), alpha);
+  gl_FragColor = vec4(mix(vec3(0.55,0.55,0.0),vec3(1.0,1.0,0.55),step(0.83,vSeed)), alpha);
   #include <colorspace_fragment>
 }`;

@@ -169,7 +169,7 @@ export function initExperienceGame(): WorldCleanup {
       monolith.position.y = 2.3;
       monolith.castShadow = true;
       group.add(monolith);
-      const accent = new MeshStandardMaterial({ color: 0x2957ff, emissive: 0x2957ff, emissiveIntensity: .9, roughness: .4 });
+      const accent = new MeshStandardMaterial({ color: 0xffff00, emissive: 0xffff00, emissiveIntensity: .9, roughness: .4 });
       const strip = new Mesh(new BoxGeometry(.16, 3.2, .5), accent);
       strip.position.set(-.86, 2.3, 0);
       group.add(strip);
@@ -179,7 +179,7 @@ export function initExperienceGame(): WorldCleanup {
       const labelContext = labelCanvas.getContext('2d');
       if (labelContext) {
         labelContext.clearRect(0, 0, 128, 256);
-        labelContext.fillStyle = '#ffd66b';
+        labelContext.fillStyle = '#ffff00';
         labelContext.font = '700 150px Arial, sans-serif';
         labelContext.textAlign = 'center';
         labelContext.textBaseline = 'middle';
@@ -221,7 +221,7 @@ export function initExperienceGame(): WorldCleanup {
       return { minX: minX - 4, maxX: maxX + 4, minZ: minZ - 4, maxZ: maxZ + 4 };
     })();
 
-    const carPaint = new MeshPhysicalMaterial({ color: 0x2957ff, emissive: 0x081337, emissiveIntensity: .3, roughness: .22, metalness: .68, clearcoat: .8, clearcoatRoughness: .18 });
+    const carPaint = new MeshPhysicalMaterial({ color: 0xffff00, emissive: 0x333300, emissiveIntensity: .3, roughness: .22, metalness: .68, clearcoat: .8, clearcoatRoughness: .18 });
     const trim = new MeshStandardMaterial({ color: 0x0b0d13, roughness: .28, metalness: .72 });
     const glass = new MeshPhysicalMaterial({ color: 0x111827, roughness: .08, metalness: .55, transmission: .08, transparent: true, opacity: .94 });
     const carBody = new Mesh(new BoxGeometry(1.55, .42, 2.8), carPaint);
@@ -353,14 +353,14 @@ export function initExperienceGame(): WorldCleanup {
       const mapPad = 10;
       const headerH = 18;
       traceRoundedRect(context, mapX, mapY, mapSize, mapSize, 6);
-      context.fillStyle = 'rgba(12, 16, 27, .88)';
+      context.fillStyle = 'rgba(9, 9, 9, .88)';
       context.fill();
-      context.strokeStyle = 'rgba(53, 64, 91, .95)';
+      context.strokeStyle = 'rgba(87, 86, 82, .95)';
       context.lineWidth = 1;
       context.stroke();
       context.font = '9px "IBM Plex Mono", monospace';
       context.textAlign = 'left';
-      context.fillStyle = '#9eb2ff';
+      context.fillStyle = '#ffff81';
       context.fillText('SECTOR / MAP', mapX + mapPad, mapY + 16);
 
       const innerX = mapX + mapPad;
@@ -381,7 +381,7 @@ export function initExperienceGame(): WorldCleanup {
       context.beginPath();
       context.rect(innerX, innerY, innerW, innerH);
       context.clip();
-      context.strokeStyle = 'rgba(158, 178, 255, .12)';
+      context.strokeStyle = 'rgba(255, 255, 129, .12)';
       context.lineWidth = 1;
       for (let line = 1; line < 3; line += 1) {
         const gridX = originX + drawnW * (line / 3);
@@ -395,7 +395,7 @@ export function initExperienceGame(): WorldCleanup {
       }
       const spawnX = mapToX(0);
       const spawnY = mapToY(0);
-      context.strokeStyle = 'rgba(158, 178, 255, .55)';
+      context.strokeStyle = 'rgba(255, 255, 129, .55)';
       context.beginPath();
       context.moveTo(spawnX - 4, spawnY);
       context.lineTo(spawnX + 4, spawnY);
@@ -426,13 +426,13 @@ export function initExperienceGame(): WorldCleanup {
         const ringPulse = .5 + .5 * Math.sin(now * .005);
         context.beginPath();
         context.arc(baseMapX, baseMapY, active ? 6 : 4.5, 0, Math.PI * 2);
-        context.fillStyle = 'rgba(41, 87, 255, .95)';
+        context.fillStyle = 'rgba(255, 255, 0, .95)';
         context.fill();
         context.lineWidth = active ? 2 : 1;
-        context.strokeStyle = active ? '#ffd66b' : `rgba(158, 178, 255, ${(.35 + .4 * ringPulse).toFixed(3)})`;
+        context.strokeStyle = active ? '#ffff00' : `rgba(255, 255, 129, ${(.35 + .4 * ringPulse).toFixed(3)})`;
         context.stroke();
         context.font = '700 9px "IBM Plex Mono", monospace';
-        context.fillStyle = active ? '#ffd66b' : 'rgba(232, 236, 255, .85)';
+        context.fillStyle = active ? '#ffff00' : 'rgba(232, 236, 255, .85)';
         context.fillText(base.entry.number, baseMapX + 7, baseMapY + 3);
       }
       const heading = player.rotation.y;
@@ -450,11 +450,11 @@ export function initExperienceGame(): WorldCleanup {
       context.closePath();
       context.fillStyle = '#ffd66b';
       context.fill();
-      context.strokeStyle = 'rgba(12, 16, 27, .9)';
+      context.strokeStyle = 'rgba(9, 9, 9, .9)';
       context.lineWidth = 1;
       context.stroke();
       context.restore();
-      context.strokeStyle = 'rgba(158, 178, 255, .22)';
+      context.strokeStyle = 'rgba(255, 255, 129, .22)';
       context.strokeRect(innerX + .5, innerY + .5, innerW - 1, innerH - 1);
 
       const keySize = Math.round(Math.min(46, Math.max(30, Math.min(width, height) * .075)));
@@ -472,7 +472,7 @@ export function initExperienceGame(): WorldCleanup {
       ];
       context.font = '9px "IBM Plex Mono", monospace';
       context.textAlign = 'center';
-      context.fillStyle = `rgba(158, 178, 255, ${(.4 + .35 * (.5 + .5 * Math.sin(now * .003))).toFixed(3)})`;
+      context.fillStyle = `rgba(255, 255, 129, ${(.4 + .35 * (.5 + .5 * Math.sin(now * .003))).toFixed(3)})`;
       context.fillText('ARROWS / WASD', clusterX + clusterWidth / 2, clusterY - 10);
       for (const key of cluster) {
         const pulse = .5 + .5 * Math.sin(now * .004 - key.phase);
@@ -482,15 +482,15 @@ export function initExperienceGame(): WorldCleanup {
         const boxSize = keySize + grow * 2;
         context.save();
         if (key.active) {
-          context.shadowColor = 'rgba(41, 87, 255, .9)';
+          context.shadowColor = 'rgba(255, 255, 0, .9)';
           context.shadowBlur = 14;
         }
         traceRoundedRect(context, boxX, boxY, boxSize, boxSize, Math.max(5, boxSize * .18));
-        context.fillStyle = key.active ? 'rgba(41, 87, 255, .95)' : 'rgba(12, 16, 27, .78)';
+        context.fillStyle = key.active ? 'rgba(255, 255, 0, .95)' : 'rgba(9, 9, 9, .85)';
         context.fill();
         context.shadowBlur = 0;
         context.lineWidth = key.active ? 2 : 1;
-        context.strokeStyle = key.active ? '#9eb2ff' : `rgba(158, 178, 255, ${(.28 + .5 * pulse).toFixed(3)})`;
+        context.strokeStyle = key.active ? '#ffff81' : `rgba(255, 255, 129, ${(.28 + .5 * pulse).toFixed(3)})`;
         context.stroke();
         const glyphSize = boxSize * .42;
         context.translate(boxX + boxSize / 2, boxY + boxSize / 2);
@@ -504,7 +504,7 @@ export function initExperienceGame(): WorldCleanup {
         context.lineTo(-glyphSize * .32, glyphSize * .15);
         context.lineTo(-glyphSize * .8, glyphSize * .15);
         context.closePath();
-        context.fillStyle = key.active ? '#ffffff' : `rgba(158, 178, 255, ${(.55 + .45 * pulse).toFixed(3)})`;
+        context.fillStyle = key.active ? '#090909' : `rgba(255, 255, 129, ${(.55 + .45 * pulse).toFixed(3)})`;
         context.fill();
         context.restore();
       }

@@ -86,20 +86,6 @@ export function initSections(manager: MotionManager): () => void {
       });
       extra.push(() => horizontal?.scrollTrigger?.kill());
     }
-    const lab = document.querySelector<HTMLElement>('#lab');
-    const track = document.querySelector<HTMLElement>('#lab-track');
-    if (lab && track && track.scrollWidth > lab.clientWidth) {
-      // Native vertical scroll drives a short lateral reveal; no pin or wheel interception.
-      const travel = () => Math.max(0, track.scrollWidth - lab.clientWidth);
-      const tween = gsap.to(track, { x: () => -travel(), ease: 'none',
-        scrollTrigger: { trigger: lab, start: 'top 75%', end: 'bottom 25%', scrub: 0.6, invalidateOnRefresh: true },
-      });
-      const keyboard = () => {
-        tween.scrollTrigger?.kill(); tween.kill(); gsap.set(track, { clearProps: 'transform' });
-      };
-      track.addEventListener('focusin', keyboard);
-      extra.push(() => track.removeEventListener('focusin', keyboard));
-    }
   });
   let paused: gsap.core.Tween[] = [];
   const visibility = () => {

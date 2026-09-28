@@ -103,28 +103,6 @@ async function initialize() {
   document.querySelectorAll('section[id]').forEach(el => nav.observe(el)); observers.push(nav);
   const tweens: gsap.core.Tween[] = [];
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
-  const loops = new Map<Element,gsap.core.Tween>();
-  const labObserver = new IntersectionObserver(entries => {
-    for(const entry of entries) {const loop=loops.get(entry.target); if(entry.isIntersecting && !document.hidden && !reduced.matches) loop?.play(); else loop?.pause();}
-  }); observers.push(labObserver);
-  for(const button of document.querySelectorAll<HTMLElement>('[data-experiment]')) {
-    const art = button.querySelector<HTMLElement>('.experiment-art')!;
-    const target = art.firstElementChild as HTMLElement;
-    let variation = 0;
-    if(!reduced.matches) {
-      const tween = gsap.to(target, {rotation:'+=12',duration:6,yoyo:true,repeat:-1,ease:'sine.inOut',paused:true});
-      loops.set(button,tween); tweens.push(tween);labObserver.observe(button);
-    }
-    button.addEventListener('click', () => {
-      variation++;
-      if(button.dataset.experiment==='reactor') gsap.to(target,{rotation:variation*55,scaleX:variation%2?1.15:1,scaleY:variation%2?1.15:1,duration:reduced.matches?0:.6});
-      if(button.dataset.experiment==='type') gsap.to(target,{skewX:variation%2?-16:0,letterSpacing:variation%2?'.02em':'-.07em',duration:reduced.matches?0:.5});
-      if(button.dataset.experiment==='signal') target.querySelectorAll('i').forEach((bar,i)=>gsap.to(bar,{height:30+((i*37+variation*53)%140),opacity:.35+((i+variation)%5)*.13,duration:reduced.matches?0:.4}));
-      button.dataset.variation=String(variation);
-    }, {signal});
-  }
-  const syncLoops = () => {for(const [el,loop] of loops){const r=el.getBoundingClientRect();if(!document.hidden && !reduced.matches && r.bottom>0 && r.top<innerHeight)loop.play();else loop.pause();}};
-  document.addEventListener('visibilitychange',syncLoops,{signal});reduced.addEventListener('change',syncLoops,{signal});
   const diagnostic = window.setInterval(() => {
     if(!dev || dev.hidden) return;
     const pre = dev.querySelector('pre');

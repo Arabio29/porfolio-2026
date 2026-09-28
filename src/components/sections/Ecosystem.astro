@@ -1,5 +1,5 @@
 ---
-import { skills, additionalSkills, physicsWords } from '../../data/skills';
+import { skills, additionalSkills } from '../../data/skills';
 import { copy } from '../../data/interface';
 import TechWall from './TechWall.astro';
 ---
@@ -58,8 +58,4 @@ import TechWall from './TechWall.astro';
 
   <div class="physics-heading"><h3>{copy.physicsTitle[0]}<br /><span>{copy.physicsTitle[1]}</span></h3><p>{copy.physicsNote}</p></div>
   <TechWall />
-  <div id="physics-zone" class="physics-zone" aria-label="Interactive tools experiment">
-    <div class="physics-words">{physicsWords.map((word) => <span data-physics-word data-cursor="DRAG">{word}</span>)}</div>
-    <span class="physics-caption mono">EXPERIMENT / GRAVITY IS OPTIONAL.</span>
-  </div>
 </section>

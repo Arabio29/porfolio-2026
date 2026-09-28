@@ -36,7 +36,8 @@ export async function initWebGL(motion: MotionManager): Promise<() => void> {
     };
     active = cleanup;
     return cleanup;
-  } catch {
+  } catch (error) {
+    console.warn('[webgl] Renderer unavailable; showing the static fallback.', error);
     if (experience) experience.dispose();
     else renderer?.dispose();
     canvas.style.visibility = 'hidden';
@@ -90,7 +91,7 @@ class WebGLExperience {
       this.scene.add(this.reactor.group);
     }
     this.gallery = new ImageGallery(images);
-    this.listen(this.canvas, 'webglcontextlost', (event) => { event.preventDefault(); this.fail(); });
+    this.listen(this.canvas, 'webglcontextlost', (event) => { event.preventDefault(); this.fail('context lost'); });
     this.listen(window, 'resize', this.measure);
     this.listen(document, 'webgl:refresh', this.measure);
     this.listen(document, 'astro:before-swap', () => this.dispose());
@@ -144,7 +145,7 @@ class WebGLExperience {
     if (this.disposed || document.hidden) return;
     const { state } = this.motion;
     const compactViewport = state.isTouch || state.viewport.width < 768;
-    if (state.reducedMotion) { this.fail(); return; }
+    if (state.reducedMotion) { this.fail('reduced motion'); return; }
     if (!this.visible.size) { this.canvas.style.visibility = 'hidden'; return; }
     const dt = clamp(delta, 0, .05);
     const imageCount = this.gallery?.update(state, dt, time) ?? 0;
@@ -155,13 +156,10 @@ class WebGLExperience {
       const scene = reactorVisible
         ? sceneProgress(state.scroll.y, state.viewport.height, this.sections)
         : undefined;
-      const nextChapterEntering = scene &&
-        state.scroll.y + state.viewport.height * .78 > this.sections.manifestoTop &&
-        state.scroll.y < this.sections.manifestoTop + state.viewport.height * .65;
-      // Let the reactor bleed over the next chapter only while the narrative
-      // is crossing from Hero into Manifesto. Normal sections keep their text
-      // above the graphics layer.
-      this.canvas.style.zIndex = imageCount || nextChapterEntering ? '3' : '1';
+      // The canvas floats above section backgrounds (opaque since the
+      // yellow chapters) while staying below navigation and overlays.
+      // It is transparent except for 3D pixels and never takes pointers.
+      this.canvas.style.zIndex = '3';
       if (reactorVisible && !imageCount && this.reactor) {
         const { dissolve, regroup } = scene!;
         this.reactor.update(time, dt, dissolve, regroup, state.mouse);
@@ -186,15 +184,16 @@ class WebGLExperience {
         this.renderer.clearDepth();
         this.renderer.render(this.gallery.scene, this.gallery.camera);
       }
-      if (this.shaderFailed) { this.fail(); return; }
+      if (this.shaderFailed) { this.fail('shader error'); return; }
       this.hasRendered = true;
       this.canvas.style.visibility = 'visible';
       this.canvas.style.opacity = imageCount ? '1' : compactViewport ? '.24' : '1';
       document.documentElement.dataset.webgl = 'ready';
-    } catch { this.fail(); }
+    } catch (error) { console.warn('[webgl] Frame failed; showing the static fallback.', error); this.fail('frame error'); }
   };
 
-  private fail() {
+  private fail(reason = 'unknown') {
+    console.warn(`[webgl] Scene disabled (${reason}); showing the static fallback.`);
     this.failed = true;
     this.dispose();
     document.documentElement.dataset.webgl = 'unavailable';

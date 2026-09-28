@@ -5,5 +5,4 @@ export const skills = [
   { id: 'devops', name: 'DevOps', lead: 'Azure / Docker / Linux', detail: 'From commit to running system.', items: ['Azure DevOps', 'Docker', 'Linux', 'Nginx', 'CI/CD'], position: 'devops' },
   { id: 'tools', name: 'Tools', lead: 'Git / OpenAPI', detail: 'Contracts and collaboration.', items: ['Git', 'Swagger / OpenAPI', 'Code review', 'Agile delivery'], position: 'tools' },
 ];
-export const additionalSkills = ['Python', 'Java', 'Spring Boot', 'React', 'Node.js', 'Next.js', 'Applied AI'];
-export const physicsWords = ['C#', '.NET', 'ANGULAR', 'BLAZOR', 'SQL', 'DOCKER', 'AZURE', 'GIT'];
+export const additionalSkills = ['Python', 'Java', 'Spring Boot', 'React', 'Node.js', 'Next.js', 'Applied AI', 'RAG', 'MCP'];

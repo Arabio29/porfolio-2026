@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { projects } from '../src/data/projects';
 import { profile } from '../src/data/profile';
 import { experience, practice } from '../src/data/experience';
-import { skills, additionalSkills, physicsWords } from '../src/data/skills';
+import { skills, additionalSkills } from '../src/data/skills';
 describe('publishable portfolio content', () => {
  it('has an honest identity and routable, complete case studies', () => {
   expect(profile.name).toBe('Eliasib Cantor');
@@ -40,6 +40,12 @@ describe('publishable portfolio content', () => {
  it('keeps the ecosystem vocabulary aligned with the real stack', () => {
   expect(skills.map(s => s.id)).toEqual(['backend', 'frontend', 'database', 'devops', 'tools']);
   expect(additionalSkills).toContain('Python');
-  expect(physicsWords).toContain('C#');
+  expect(additionalSkills).toContain('RAG');
+ });
+ it('states the mission and the business domains without inventing metrics', () => {
+  expect(profile.introduction).toBe('I build scalable software that solves real business problems.');
+  expect(profile.domains.length).toBeGreaterThanOrEqual(6);
+  expect(profile.domains).toContain('Order management');
+  expect(profile.domains).toContain('Inventory');
  });
 });

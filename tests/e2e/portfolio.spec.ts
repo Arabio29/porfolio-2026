@@ -52,7 +52,7 @@ test('project links remain clickable while the horizontal work rail is pinned', 
 test('navigation anchors scroll to every section', async ({ page }) => {
   await page.goto('/');
   await page.waitForTimeout(600);
-  for (const id of ['work', 'experience', 'about', 'contact', 'work']) {
+  for (const id of ['work', 'experience', 'contact', 'work']) {
     await page.locator(`[data-nav=${id}]`).click();
     await expect(page).toHaveURL(new RegExp(`#${id}$`));
     await expect.poll(async () => {

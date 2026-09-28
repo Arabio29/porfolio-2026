@@ -12,6 +12,7 @@ export const profile = {
   philosophy: 'Make it clean, observable, maintainable and capable of evolving.',
   interests: ['Enterprise applications', 'Backend engineering', 'Cloud-native systems', 'Applied AI'],
   learning: ['Python', 'LLM-powered applications', 'RAG and tool calling', 'Distributed systems', 'Cloud architecture'],
+  domains: ['Order management', 'Inventory', 'Purchasing', 'Product management', 'Users & permissions', 'Security', 'Internal tools', 'Enterprise integrations'],
   primaryStack: ['C#', '.NET', 'ASP.NET Core', 'Blazor', 'Angular', 'TypeScript', 'SQL Server'],
   supportingStack: ['JavaScript', 'Java', 'Spring Boot', 'React', 'Node.js', 'Docker', 'Azure DevOps', 'Linux / Nginx'],
   currentDirection: ['Cloud-native architecture', 'Distributed systems', 'Applied AI', 'LLM-powered applications'],

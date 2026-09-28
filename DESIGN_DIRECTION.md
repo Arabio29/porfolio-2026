@@ -53,7 +53,7 @@ Astro owns static HTML, routing, metadata and View Transitions. Typed files in `
 The public profile now supplies verified identity, location, email, LinkedIn, website, YouTube and GitHub references. Employment history, dates, clients and metrics remain absent until supplied directly. Public repository work is described as personal/public work, never as client work or employment.
 
 ## Performance and resilience
-- Dynamic-import WebGL and Matter.js only when enhancement is useful.
+- Dynamic-import WebGL only when enhancement is useful.
 - Use one GSAP ticker and one renderer instead of independent animation loops.
 - Cache layout rectangles and update them only on resize, font readiness or ScrollTrigger refresh.
 - Clamp DPR and particle counts by device class; stop rendering when targets are outside the viewport or the document is hidden.

@@ -40,7 +40,7 @@ export function initEcosystem(manager: MotionManager): () => void {
   const readout = document.querySelector<HTMLElement>('[data-eco-readout]');
   const nodes = Array.from(stage.querySelectorAll<HTMLDetailsElement>('[data-skill-node]'));
   const orbitTrack = document.querySelector<HTMLElement>('[data-orbit-track]');
-  const ACCENT = '#2957ff';
+  const ACCENT = '#ffff00';
 
   // Single-open accordion: native <details> still works with no JS.
   let activeId = '';
@@ -306,7 +306,7 @@ export function initEcosystem(manager: MotionManager): () => void {
       const tw = 0.25 + 0.35 * (0.5 + 0.5 * Math.sin(time * 1.4 + p.seed));
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(158,178,255,${tw.toFixed(3)})`;
+      ctx.fillStyle = `rgba(255,255,129,${tw.toFixed(3)})`;
       ctx.fill();
     }
 
@@ -325,7 +325,7 @@ export function initEcosystem(manager: MotionManager): () => void {
       ctx.setLineDash(isActive ? [] : [3, 9]);
       ctx.lineDashOffset = isActive ? -time * 60 : -time * 12;
       ctx.lineWidth = isActive ? 1.6 : 1;
-      ctx.strokeStyle = isActive ? 'rgba(41,87,255,0.9)' : 'rgba(241,239,233,0.16)';
+      ctx.strokeStyle = isActive ? 'rgba(255,255,0,0.9)' : 'rgba(241,239,233,0.16)';
       ctx.shadowBlur = isActive ? 12 + energy * 18 : 0;
       ctx.shadowColor = ACCENT;
       ctx.stroke();
@@ -339,7 +339,7 @@ export function initEcosystem(manager: MotionManager): () => void {
         const iy = (1 - t) * (1 - t) * sy + 2 * (1 - t) * t * myp + t * t * a.y;
         ctx.beginPath();
         ctx.arc(ix, iy, isActive ? 2.6 : 1.6, 0, Math.PI * 2);
-        ctx.fillStyle = isActive ? ACCENT : 'rgba(158,178,255,0.5)';
+        ctx.fillStyle = isActive ? ACCENT : 'rgba(255,255,129,0.5)';
         ctx.fill();
       }
       // Node anchor dot.
@@ -355,7 +355,7 @@ export function initEcosystem(manager: MotionManager): () => void {
       const t = (time * 0.5 + i * 0.5) % 1;
       ctx.beginPath();
       ctx.arc(corePos.x, corePos.y, corePos.r * pulse * (0.7 + t * 0.9), 0, Math.PI * 2);
-      ctx.strokeStyle = `rgba(41,87,255,${(0.35 * (1 - t)).toFixed(3)})`;
+      ctx.strokeStyle = `rgba(255,255,0,${(0.35 * (1 - t)).toFixed(3)})`;
       ctx.lineWidth = 1;
       ctx.stroke();
     }

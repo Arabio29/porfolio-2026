@@ -3,7 +3,7 @@ import { copy } from '../../data/interface';
 ---
 
 <section id="manifesto" class="manifesto section-pad" aria-labelledby="manifesto-title">
-  <div class="chapter mono"><span>01 / THE INTENT</span><span>ENGINEERING WITH FEELING</span></div>
+  <div class="chapter mono"><span>01 / THE INTENT</span><span>BUSINESS-CRITICAL BY DESIGN</span></div>
   <div class="manifesto-intro"><span class="mono">A NOTE ON THE WORK</span><p>Systems are invisible until someone has to use them.</p></div>
   <h2 id="manifesto-title">
     {copy.manifesto.map((line, index) => <span data-reveal class:list={['manifesto-line', { 'outline-word': index === 2 }]}>{line}</span>)}
@@ -11,6 +11,6 @@ import { copy } from '../../data/interface';
   <div class="manifesto-foot">
     <span class="asterisk" aria-hidden="true">✳</span>
     <p>{copy.manifestoNote}</p>
-    <span class="mono">ENGINEERING<br />INTERFACES<br />SYSTEMS<br />EXPERIENCES</span>
+    <span class="mono">BACKEND<br />FRONTEND<br />CLOUD<br />AI</span>
   </div>
 </section>

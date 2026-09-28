@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
-const state = vi.hoisted(() => ({ managers: [] as any[], sectionClean: vi.fn(), ecosystemClean: vi.fn(), orbitClean: vi.fn(), cursorClean: vi.fn(), physicsClean: vi.fn(), webglClean: vi.fn(), webglInit: vi.fn(), prefs: undefined as undefined | (() => void) }));
+const state = vi.hoisted(() => ({ managers: [] as any[], sectionClean: vi.fn(), ecosystemClean: vi.fn(), orbitClean: vi.fn(), cursorClean: vi.fn(), webglClean: vi.fn(), webglInit: vi.fn(), prefs: undefined as undefined | (() => void) }));
 vi.mock('../src/lib/animation/motion-manager', () => ({ MotionManager: class {
   state = { reducedMotion: false, isTouch: false }; destroy = vi.fn();
   constructor() { state.managers.push(this); }
@@ -18,7 +18,6 @@ it('cleans earlier enhancements if a later enhancement fails to initialize', asy
   expect(state.managers[0].destroy).toHaveBeenCalledOnce();
   warning.mockRestore();
 });
-vi.mock('../src/lib/animation/physics', () => ({ initPhysics: () => state.physicsClean }));
 vi.mock('../src/lib/webgl/experience', () => ({ initWebGL: state.webglInit }));
 import { initMotion } from '../src/lib/animation';
 let cleanup: () => void;
@@ -38,7 +37,7 @@ it('reinitializes preferences and disposes all owned effects before Astro swaps'
   expect(state.sectionClean).toHaveBeenCalledTimes(2);
   expect(state.ecosystemClean).toHaveBeenCalledTimes(2);
   expect(state.orbitClean).toHaveBeenCalledTimes(2);
-  expect(state.cursorClean).toHaveBeenCalledTimes(2); expect(state.physicsClean).toHaveBeenCalledTimes(2);
+  expect(state.cursorClean).toHaveBeenCalledTimes(2);
   cleanup(); expect(state.managers[0].destroy).toHaveBeenCalledOnce();
 });
 it('never leaves two managers alive after repeated initialization', async () => {

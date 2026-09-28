@@ -15,7 +15,7 @@ export function createReactor(count: number, segments: number, dpr: number) {
   const dissolve = { value: 0 };
   const material = (chrome: number) => new ShaderMaterial({
     vertexShader: metalVertex, fragmentShader: metalFragment,
-    uniforms: { uColor: { value: new Color('#2957ff') }, uChrome: { value: chrome }, uDissolve: dissolve },
+    uniforms: { uColor: { value: new Color('#ffff00') }, uChrome: { value: chrome }, uDissolve: dissolve },
   });
   const cobalt = material(0);
   const chrome = material(1);
