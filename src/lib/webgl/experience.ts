@@ -65,6 +65,8 @@ class WebGLExperience {
   private unsubscribe = noop;
   private shaderFailed = false;
   private hasRendered = false;
+  private freshFrames = 0;
+  private returnTime = -1000;
 
   constructor(private renderer: WebGLRenderer, private canvas: HTMLCanvasElement, private motion: MotionManager) {}
 
@@ -96,7 +98,22 @@ class WebGLExperience {
     this.listen(document, 'webgl:refresh', this.measure);
     this.listen(document, 'astro:before-swap', () => this.dispose());
     this.listen(document, 'visibilitychange', () => {
-      if (document.hidden) this.canvas.style.visibility = 'hidden';
+      if (document.hidden) {
+        this.canvas.style.visibility = 'hidden';
+        this.canvas.style.zIndex = '1';
+      } else {
+        // Tab return: the GPU context may be lost or frozen while backgrounded.
+        // A lost context can never present fresh pixels again: drop to the
+        // static fallback instead of covering the hero with a dead buffer.
+        this.hasRendered = false;
+        this.freshFrames = 0;
+        this.returnTime = performance.now();
+        this.measure();
+        const gl = this.renderer.getContext() as WebGLRenderingContext | null;
+        if (gl && typeof gl.isContextLost === 'function' && gl.isContextLost()) {
+          this.fail('context lost on return');
+        }
+      }
     });
     ScrollTrigger.addEventListener('refresh', this.measure);
     this.removers.push(() => ScrollTrigger.removeEventListener('refresh', this.measure));
@@ -146,20 +163,16 @@ class WebGLExperience {
     const { state } = this.motion;
     const compactViewport = state.isTouch || state.viewport.width < 768;
     if (state.reducedMotion) { this.fail('reduced motion'); return; }
-    if (!this.visible.size) { this.canvas.style.visibility = 'hidden'; return; }
+    if (!this.visible.size) { this.canvas.style.visibility = 'hidden'; this.canvas.style.zIndex = '1'; return; }
     const dt = clamp(delta, 0, .05);
     const imageCount = this.gallery?.update(state, dt, time) ?? 0;
     const reactorVisible = !!this.reactor && [this.hero, this.manifesto, this.contact].some(target => target && this.visible.has(target));
-    if (!imageCount && !reactorVisible) { this.canvas.style.visibility = 'hidden'; return; }
+    if (!imageCount && !reactorVisible) { this.canvas.style.visibility = 'hidden'; this.canvas.style.zIndex = '1'; return; }
     try {
       this.renderer.clear();
       const scene = reactorVisible
         ? sceneProgress(state.scroll.y, state.viewport.height, this.sections)
         : undefined;
-      // The canvas floats above section backgrounds (opaque since the
-      // yellow chapters) while staying below navigation and overlays.
-      // It is transparent except for 3D pixels and never takes pointers.
-      this.canvas.style.zIndex = '3';
       if (reactorVisible && !imageCount && this.reactor) {
         const { dissolve, regroup } = scene!;
         this.reactor.update(time, dt, dissolve, regroup, state.mouse);
@@ -169,9 +182,6 @@ class WebGLExperience {
         this.camera.lookAt(0, 0, 0);
         const worldHeight = 2 * Math.tan(this.camera.fov * Math.PI / 360) * this.camera.position.z;
         const worldWidth = worldHeight * this.camera.aspect;
-        // Right-side composition protects the left-aligned professional identity.
-        // Mobile keeps the reactor as a peripheral signal so the identity remains
-        // the first readable layer instead of turning the scene into wallpaper.
         this.reactor.group.position.set(
           worldWidth * (compactViewport ? .46 : .22),
           worldHeight * (compactViewport ? -.14 : .05),
@@ -186,6 +196,14 @@ class WebGLExperience {
       }
       if (this.shaderFailed) { this.fail('shader error'); return; }
       this.hasRendered = true;
+      this.freshFrames += 1;
+      // Show only after consecutive fresh frames AND a short settle so a
+      // stale/frozen GPU buffer can never cover the hero title on tab return.
+      // The DOM title stays visible meanwhile; the reactor pops in after.
+      if (this.freshFrames < 2 || performance.now() - this.returnTime < 400) return;
+      // Reactor renders above section backgrounds (main z-index:2); the hero
+      // text sits at local z-index:4 and shows through the fresh transparency.
+      this.canvas.style.zIndex = '3';
       this.canvas.style.visibility = 'visible';
       this.canvas.style.opacity = imageCount ? '1' : compactViewport ? '.24' : '1';
       document.documentElement.dataset.webgl = 'ready';

@@ -263,9 +263,18 @@ export function initEcosystem(manager: MotionManager): () => void {
   }
 
   const observer = new IntersectionObserver(entries => {
-    visible = entries.some(e => e.isIntersecting);
+    const entry = entries[entries.length - 1];
+    visible = Boolean(entry?.isIntersecting);
   }, { threshold: 0 });
   observer.observe(stage);
+
+  const onVisibility = () => {
+    if (!document.hidden) {
+      const r = stage.getBoundingClientRect();
+      if (r.bottom > 0 && r.top < window.innerHeight) visible = true;
+    }
+  };
+  document.addEventListener('visibilitychange', onVisibility);
   const resizeObserver = new ResizeObserver(() => { resize(); });
   resizeObserver.observe(stage);
   window.addEventListener('resize', resize, { passive: true });
@@ -373,6 +382,7 @@ export function initEcosystem(manager: MotionManager): () => void {
     tilts.forEach(m => { (m.rx as unknown as { tween?: { kill: () => void } }).tween?.kill(); (m.ry as unknown as { tween?: { kill: () => void } }).tween?.kill(); });
     tilts.clear();
     observer.disconnect();
+    document.removeEventListener('visibilitychange', onVisibility);
     resizeObserver.disconnect();
     window.removeEventListener('resize', resize);
     window.removeEventListener('orientationchange', resize);

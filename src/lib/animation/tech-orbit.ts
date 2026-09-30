@@ -156,9 +156,30 @@ export function initTechOrbit(manager: MotionManager): () => void {
 
   let visible = true;
   const observer = new IntersectionObserver(entries => {
-    visible = entries.some(entry => entry.isIntersecting);
+    const entry = entries[entries.length - 1];
+    visible = Boolean(entry?.isIntersecting);
   }, { threshold: 0.1 });
   observer.observe(wall);
+
+  const onVisibility = () => {
+    if (!document.hidden) {
+      const r = wall.getBoundingClientRect();
+      if (r.bottom > 0 && r.top < window.innerHeight) {
+        visible = true;
+        lastActive = elapsed;
+      }
+      // Dead residue: wall stranded at opacity ~0 with no live tween (its
+      // ScrollTrigger already fired) can never recover on its own. Clear only
+      // then; a healthy replay always owns a live tween and is untouched.
+      if (typeof gsap.getTweensOf === 'function'
+        && wall.style && wall.style.opacity
+        && gsap.getTweensOf(wall).length === 0) {
+        wall.style.opacity = '';
+        wall.style.transform = '';
+      }
+    }
+  };
+  document.addEventListener('visibilitychange', onVisibility);
 
   const offFrame = manager.onFrame((_time, delta) => {
     if (!visible || document.hidden) return;
@@ -188,6 +209,7 @@ export function initTechOrbit(manager: MotionManager): () => void {
     if (destroyed) return; destroyed = true;
     offFrame();
     observer.disconnect();
+    document.removeEventListener('visibilitychange', onVisibility);
     window.removeEventListener('resize', layout);
     wall.removeEventListener('pointerover', onOver);
     wall.removeEventListener('pointerleave', onOut);

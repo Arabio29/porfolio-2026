@@ -29,7 +29,7 @@
 .reactor-fallback span { position: absolute; top: 47%; left: 48%; color: var(--accent-text); font: 22px var(--mono); }
 @keyframes reactor-idle { to { transform: rotate(385deg) skewX(-12deg); } }
 .reactor-caption { position: absolute; z-index: 3; top: 66%; right: var(--gutter); left: 52%; display: flex; justify-content: space-between; gap: 16px; color: var(--muted); font-size: 9px; }
-.hero-bottom { position: absolute; z-index: 4; right: var(--gutter); bottom: 30px; left: var(--gutter); display: grid; grid-template-columns: 1fr 1fr 1fr; align-items: end; gap: 30px; }
+.hero-bottom { position: absolute; z-index: 4; right: var(--gutter); bottom: 30px; left: var(--gutter); display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 30px; }
 .hero-bottom p { color: var(--muted); font-size: 12px; line-height: 1.45; }
 .hero-bottom > .mono { justify-self: end; color: var(--muted); font-size: 9px; }
 .scroll-tick { display: inline-block; margin-left: 8px; color: var(--accent-text); animation: scroll-tick 1.5s ease-in-out infinite; }

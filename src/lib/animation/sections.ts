@@ -88,11 +88,37 @@ export function initSections(manager: MotionManager): () => void {
     }
   });
   let paused: gsap.core.Tween[] = [];
+  let wasHidden = false;
   const visibility = () => {
     if (document.hidden) {
+      wasHidden = true;
       paused = context.getTweens().filter((tween: gsap.core.Tween) => !tween.paused() && tween.progress() < 1);
       paused.forEach(tween => tween.pause());
-    } else { paused.forEach(tween => tween.resume()); paused = []; }
+    } else {
+      // Init call (never hidden): strictly no-op, keep GSAP start states intact.
+      if (!wasHidden) return;
+      wasHidden = false;
+      // Resume everything in this context, not just the captured list: if a
+      // re-init abandoned the previous paused list, those tweens would stay
+      // frozen mid-flight forever. Nothing here is paused intentionally.
+      context.getTweens().forEach((tween: gsap.core.Tween) => { if (tween.paused()) tween.resume(); });
+      paused = [];
+      // Dead residue: a hero line stuck with hidden inline styles but no live
+      // tween (killed without revert) can never recover on its own. Clear it
+      // only when nothing animates that line anymore; a healthy intro or a
+      // replay is left untouched.
+      if (typeof gsap.getTweensOf === 'function') {
+        document.querySelectorAll<HTMLElement>('[data-hero-line]').forEach(el => {
+          if (!el.style || (!el.style.opacity && !el.style.transform)) return;
+          if (gsap.getTweensOf(el).length === 0) gsap.set(el, { clearProps: 'transform,opacity,transformOrigin' });
+        });
+      }
+      // Defensive: real browser tab switch can leave reveal elements clipped.
+      // Do NOT refresh ScrollTrigger (re-triggers hero fromTo with immediateRender).
+      document.querySelectorAll<HTMLElement>('[data-reveal]').forEach(el => {
+        if (el.style && el.style.clipPath) el.style.clipPath = '';
+      });
+    }
   };
   document.addEventListener('visibilitychange', visibility);
   visibility();

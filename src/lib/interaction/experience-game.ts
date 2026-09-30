@@ -49,6 +49,10 @@ export function initExperienceGame(): WorldCleanup {
     const THREE = await import('three');
     if (disposed || token !== generation || !visible) return;
 
+    // A previous teardown faded the canvas out; every start owns its own
+    // opacity so a second visit is not left staring at an invisible world.
+    canvas.style.opacity = '1';
+
     const {
       AmbientLight, BoxGeometry, CapsuleGeometry, Color, ConeGeometry, CylinderGeometry, DoubleSide,
       DirectionalLight, Fog, Group, Mesh, MeshPhysicalMaterial, MeshStandardMaterial, PerspectiveCamera,
@@ -655,7 +659,8 @@ export function initExperienceGame(): WorldCleanup {
     };
   };
 
-  const observer = new IntersectionObserver(([entry]) => {
+  const observer = new IntersectionObserver((entries) => {
+    const entry = entries[entries.length - 1];
     visible = Boolean(entry?.isIntersecting && entry.intersectionRatio >= .2);
     if (visible) void start();
     else stop();
@@ -663,10 +668,20 @@ export function initExperienceGame(): WorldCleanup {
   observer.observe(section);
   board.dataset.gameAvailable = 'pending';
 
+  // Re-arm on tab return: if the section is still visible, force a restart.
+  const onVisibility = () => {
+    if (!document.hidden && !cleanupWorld) {
+      const r = section.getBoundingClientRect();
+      if (r.bottom > 0 && r.top < window.innerHeight) void start();
+    }
+  };
+  document.addEventListener('visibilitychange', onVisibility);
+
   return () => {
     if (disposed) return;
     disposed = true;
     observer.disconnect();
+    document.removeEventListener('visibilitychange', onVisibility);
     stop();
     resizeObserver?.disconnect();
   };
